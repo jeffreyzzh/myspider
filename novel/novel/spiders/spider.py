@@ -3,6 +3,8 @@
 # author = JEFF
 
 import scrapy
+import re
+from bs4 import BeautifulSoup
 from novel.items import NovelItem
 
 
@@ -35,6 +37,15 @@ class NovelSpider(scrapy.Spider):
                     item['book_title'] = book_list[0]
                     item['chapter_num'] = book_list[1]
                     item['chapter_name'] = book_list[2]
-                except Exception as e:
+                except Exception:
                     continue
-                yield item
+                # yield item
+                yield scrapy.Request(url=url[i], callback=self.parseContent, meta={'item': item})
+                break
+
+    def parseContent(self, response):
+        selector = scrapy.Selector(response)
+        item = response.meta['item']
+        html = selector.xpath('//div[@class="content"]').extract()[0]
+        print(html)
+        re.search('<div class="content">')

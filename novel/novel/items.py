@@ -14,3 +14,4 @@ class NovelItem(scrapy.Item):
     chapter_num = scrapy.Field()
     chapter_name = scrapy.Field()
     chapter_url = scrapy.Field()
+    cont = scrapy.Field()
