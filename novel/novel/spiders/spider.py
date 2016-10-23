@@ -41,11 +41,16 @@ class NovelSpider(scrapy.Spider):
                     continue
                 # yield item
                 yield scrapy.Request(url=url[i], callback=self.parseContent, meta={'item': item})
-                break
 
     def parseContent(self, response):
         selector = scrapy.Selector(response)
         item = response.meta['item']
         html = selector.xpath('//div[@class="content"]').extract()[0]
-        print(html)
-        re.search('<div class="content">')
+        # print(html)
+        textField = re.search('<div style="clear:both"></div>(.*?)<p class="shangxia">', html, re.S).group()
+        cont = re.findall('<p>(.*?)</p>', textField, re.S)
+        fullcont = ''
+        for each in cont:
+            fullcont += each
+        item['cont'] = fullcont
+        yield item
