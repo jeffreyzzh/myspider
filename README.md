@@ -1,6 +1,7 @@
 # myspider
 开发环境：win10,python3.5.2,pycharm2016,mongo3
 
+# https://github.com/jeffreyzzh/myspider/tree/master/douban
 豆瓣电影top250
 标题，简介，评分，短语
 保存到csv文件
