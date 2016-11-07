@@ -13,9 +13,13 @@ class DoCrawl(object):
         self.do_request = DoRequest()
         self.base_path = "F:\mm2"
         self.base_txt = self.base_path + "\crawlloggig.txt"
+        # 创建工作文件夹
+        if not os.path.exists(self.base_path):
+            os.mkdir(self.base_path)
 
     def do_mkdir(self, title):
-        title = title.strip()
+        title = str(title).strip()
+        title = title.replace('?', '_')
         is_exists = os.path.exists(os.path.join(self.base_path, title))
         if not is_exists:
             # print('创建文件夹：', title)
@@ -28,17 +32,16 @@ class DoCrawl(object):
             return False
 
     def save_img(self, save_url, title):
-        title = title.replace('?', ' ')  # 防止title有问号，无法创建文件夹
         html = self.do_request.do_request(save_url)
         soup = BeautifulSoup(html.text, 'lxml')
         img_url = soup.find('div', class_='main-image').find('img')['src']
-        print('crawl :', title, img_url)
+        # print('crawl :', title, img_url)
         img_name = img_url[-9:]
         img = self.do_request.do_request(img_url)
         save_path = self.base_path + "\\" + title + "\\" + img_name
         with open(save_path, 'ab') as f:
             f.write(img.content)
-        print('保存成功', time.ctime())
+        print(img_url, '保存成功', time.ctime())
 
     def get_every_mm(self, get_url, title):
         page_html = self.do_request.do_request(get_url)
@@ -54,6 +57,8 @@ class DoCrawl(object):
         all_a = BeautifulSoup(start_html.text, 'lxml').find("div", class_='all').find_all('a')
         for a in all_a:
             title = a.get_text()
+			# 防止title有问号，无法创建文件夹
+            title = str(title).replace('?', ' ')
             do_url = a['href']
             self.do_mkdir(title)
             self.get_every_mm(do_url, title)
