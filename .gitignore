@@ -34,7 +34,8 @@ captures/
 
 # Intellij
 *.iml
-.idea/*
+/.idea/
+.idea/vcs.xml
 .idea/workspace.xml
 .idea/libraries
 
@@ -47,3 +48,9 @@ captures/
 *.html
 *.txt
 *.jpg
+
+/.idea/
+/target/
+/.settings/
+/.project
+/.classpath
