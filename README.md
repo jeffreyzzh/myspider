@@ -14,6 +14,6 @@
 保存在MongoDB
 (qqtvcomment)
 
-《妹子图》下载所有图片
-02改进代理IP
-03改进去重
+《妹子图》下载所有图片（meizitu01）
+02改进代理IP(meizitu02)
+03改进去重(meizitu03)
