@@ -57,7 +57,7 @@ class DoCrawl(object):
         all_a = BeautifulSoup(start_html.text, 'lxml').find("div", class_='all').find_all('a')
         for a in all_a:
             title = a.get_text()
-			# 防止title有问号，无法创建文件夹
+            # 防止title有问号，无法创建文件夹
             title = str(title).replace('?', ' ')
             do_url = a['href']
             self.do_mkdir(title)
