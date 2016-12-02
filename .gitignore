@@ -49,6 +49,11 @@ captures/
 *.txt
 *.jpg
 
+__/.idea/
+_/.idea/
+*/.idea/
+**/.idea/
+
 /.idea/
 /target/
 /.settings/
