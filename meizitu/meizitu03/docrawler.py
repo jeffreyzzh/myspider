@@ -53,7 +53,7 @@ class DoCrawl(object):
         if not os.path.exists(img_dir_path):
             os.makedirs(img_dir_path)
             with open(self.base_txt, 'a') as w:
-                w.write(path + ' ' + time.ctime() + '\n')
+                w.write(path + ' ' + time.strftime("%Y-%m-%d %H:%M:%S") + '\n')
         return img_dir_path
 
     def html(self, href, img_dir_path):
@@ -87,7 +87,7 @@ class DoCrawl(object):
         save_path = img_dir_path + '\\' + name
         with open(save_path, 'ab') as f:
             f.write(img.content)
-        print(img_url, '保存成功', time.ctime())
+        print(img_url, '保存成功', time.strftime("%Y-%m-%d %H:%M:%S"))
 
 
 if __name__ == '__main__':
