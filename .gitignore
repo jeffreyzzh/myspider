@@ -34,10 +34,12 @@ captures/
 
 # Intellij
 *.iml
-/.idea/
-.idea/vcs.xml
 .idea/workspace.xml
 .idea/libraries
+
+# Eclipse
+.project
+.pydevproject
 
 # Keystore files
 *.jks
@@ -45,6 +47,8 @@ captures/
 # python
 *.pyc
 
+/newpydev/.idea/
+*space.xml
 *.html
 *.txt
 *.jpg
