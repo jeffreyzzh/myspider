@@ -68,8 +68,10 @@ class Downpage(object):
                     # 处理html页面其他内容
                     # 标题
                     title = re.search('<title>(.*?)</title>', html, re.S).group(1)
-                    new_title = re.sub('实验楼', 'Jeffrey', title)
-                    html = re.sub(title, new_title, html)
+                    # new_title = re.sub('实验楼', 'Jeffrey', title)
+                    new_title = title.replace('实验楼', 'Jeffrey')
+                    # html = re.sub(title, new_title, html)
+                    html = html.replace(title, new_title)
                     # JS
                     js_list = re.findall('(<script src=.*?</script>)', html, re.S)
                     for js in js_list:
