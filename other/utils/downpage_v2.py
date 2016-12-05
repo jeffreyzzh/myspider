@@ -7,10 +7,12 @@ import re
 import lxml.html
 import os
 
+import time
+
 
 class Downpage(object):
     def __init__(self):
-        self.do_dir = 'Python 3 色情图片识别'
+        self.do_dir = input("输入桌面上要进行下载的文件夹名称：")
         self.base_dir = r'C:\Users\Administrator\Desktop\{}'.format(self.do_dir)
         self.img_dir = '{}\\image'.format(self.base_dir)
         self.base_img_name = '{}.png'
@@ -81,4 +83,7 @@ class Downpage(object):
 
 if __name__ == '__main__':
     d = Downpage()
+    start_time = time.time()
     d.do_main()
+    end_time = time.time()
+    print('time:{}'.format(end_time - start_time))
