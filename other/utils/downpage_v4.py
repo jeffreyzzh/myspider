@@ -5,37 +5,40 @@ import os
 import random
 import re
 import time
+
+import redis
 import requests
 from other.utils.downpage_util import format_print
 from other.utils.downpage_util import get_header
 from other.utils import downpage_param
+from multiprocessing.dummy import Pool as d_pool
 from requests import Session
 
 
 class DownPage(object):
-    def __init__(self):
-        self.session = Session()
-        self.timeout = 10
-        start_url = 'https://www.shiyanlou.com/login'
-        response = self.session.get(start_url).content
-        html = response.decode()
-        account = input("account:")
-        password = input("password:")
-        csrf = re.search('<input id="csrf_token" name="csrf_token" type="hidden" value="(.*?)">', html, re.S)
-        csrf_token = csrf.group(1)
-        data = {
-            'csrf_token': csrf_token,
-            'next': None,
-            'login': account,
-            'password': password,
-            'submit': '进入实验楼'
-        }
-        response = self.session.post(start_url, data=data)
-        resp_url = response.url
-        if start_url in resp_url:
-            format_print("login defeated")
-        if response.status_code == 200:
-            format_print('code:{}, {}'.format(response.status_code, 'login success'))
+    # def __init__(self):
+    #     self.session = Session()
+    #     self.timeout = 10
+    #     start_url = 'https://www.shiyanlou.com/login'
+    #     response = self.session.get(start_url).content
+    #     html = response.decode()
+    #     account = input("account:")
+    #     password = input("password:")
+    #     csrf = re.search('<input id="csrf_token" name="csrf_token" type="hidden" value="(.*?)">', html, re.S)
+    #     csrf_token = csrf.group(1)
+    #     data = {
+    #         'csrf_token': csrf_token,
+    #         'next': None,
+    #         'login': account,
+    #         'password': password,
+    #         'submit': '进入实验楼'
+    #     }
+    #     response = self.session.post(start_url, data=data)
+    #     resp_url = response.url
+    #     if start_url in resp_url:
+    #         format_print("login defeated")
+    #     if response.status_code == 200:
+    #         format_print('code:{}, {}'.format(response.status_code, 'login success'))
 
     def get_page(self, url):
         second = random.randint(3, 8)
@@ -120,21 +123,52 @@ class DownPage(object):
         if next_c:
             self.do_parse(next_url, base_dir, js_count, css_count, img_count, do_count)
 
+    def do_execute(self, url):
+        format_print('down course start   down course start   down course start')
+        real_url, base_dir = self.do_init_of_course(url)
+        self.do_parse(real_url, base_dir, 1, 1, 1, 1)
+        format_print(' down course end     down course end     down course end ')
+
     def do_main(self):
+        # v1.4.1
         # 单个URL
         # start_url = downpage_param.get_spider_url()
         # real_url, base_dir = self.do_init_of_course(start_url)
         # self.do_parse(real_url, base_dir, 1, 1, 1, 1)
 
+        # v 1.4.2
         # 多个URL
-        url_list = downpage_param.get_spider_list()
-        for url in url_list:
-            format_print('down course start   down course start   down course start')
-            real_url, base_dir = self.do_init_of_course(url)
-            self.do_parse(real_url, base_dir, 1, 1, 1, 1)
-            format_print(' down course end     down course end     down course end ')
+        # url_list = downpage_param.get_spider_list()
+        # for url in url_list:
+        #     self.do_execute(url)
+
+        # v 1.4.3
+        # 多个URL，多线程
+        # url_list = downpage_param.get_spider_list()
+        # pool = d_pool(4)
+        # pool.map(self.do_execute, url_list)
+
+        # v 1.4.4
+        # 多个URL，多线程，redis队列
+        r = redis.Redis()
+        queue = 'shiyanlou_spider'
+
+        url_list = []
+        print(len(url_list))
+        while True:
+            i = r.spop(queue)
+            if i is None:
+                break
+            url = i.decode()
+            print(url)
+            url_list.append(url)
+        # pool = d_pool(4)
+        # pool.map(self.do_execute, url_list)
+        print(len(url_list))
 
 
 if __name__ == '__main__':
     d = DownPage()
+    start_time = time.time()
     d.do_main()
+    format_print('spider consumes for {} seconds'.format(time.time() - start_time))
