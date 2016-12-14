@@ -8,9 +8,9 @@ import time
 
 import redis
 import requests
-from other.utils.downpage_util import format_print
-from other.utils.downpage_util import get_header
-from other.utils import downpage_param
+from other.ShiyanlouSpider.downpage_util import format_print
+from other.ShiyanlouSpider.downpage_util import get_header
+from other.ShiyanlouSpider import downpage_param
 from multiprocessing.dummy import Pool as d_pool
 from requests import Session
 

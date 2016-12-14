@@ -6,7 +6,7 @@ import re
 import time
 import os
 import urllib.parse as parse
-from other.utils.cookie2dict import MyCookie
+from other.ShiyanlouSpider.cookie2dict import MyCookie
 
 
 class DownPage(object):
