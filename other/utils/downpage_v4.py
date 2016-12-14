@@ -16,29 +16,29 @@ from requests import Session
 
 
 class DownPage(object):
-    # def __init__(self):
-    #     self.session = Session()
-    #     self.timeout = 10
-    #     start_url = 'https://www.shiyanlou.com/login'
-    #     response = self.session.get(start_url).content
-    #     html = response.decode()
-    #     account = input("account:")
-    #     password = input("password:")
-    #     csrf = re.search('<input id="csrf_token" name="csrf_token" type="hidden" value="(.*?)">', html, re.S)
-    #     csrf_token = csrf.group(1)
-    #     data = {
-    #         'csrf_token': csrf_token,
-    #         'next': None,
-    #         'login': account,
-    #         'password': password,
-    #         'submit': '进入实验楼'
-    #     }
-    #     response = self.session.post(start_url, data=data)
-    #     resp_url = response.url
-    #     if start_url in resp_url:
-    #         format_print("login defeated")
-    #     if response.status_code == 200:
-    #         format_print('code:{}, {}'.format(response.status_code, 'login success'))
+    def __init__(self):
+        self.session = Session()
+        self.timeout = 10
+        start_url = 'https://www.shiyanlou.com/login'
+        response = self.session.get(start_url).content
+        html = response.decode()
+        account = input("account:")
+        password = input("password:")
+        csrf = re.search('<input id="csrf_token" name="csrf_token" type="hidden" value="(.*?)">', html, re.S)
+        csrf_token = csrf.group(1)
+        data = {
+            'csrf_token': csrf_token,
+            'next': None,
+            'login': account,
+            'password': password,
+            'submit': '进入实验楼'
+        }
+        response = self.session.post(start_url, data=data)
+        resp_url = response.url
+        if start_url in resp_url:
+            format_print("login defeated")
+        if response.status_code == 200:
+            format_print('code:{}, {}'.format(response.status_code, 'login success'))
 
     def get_page(self, url):
         second = random.randint(3, 8)
@@ -55,14 +55,14 @@ class DownPage(object):
         title = re.search('<h4 class="pull-left course-infobox-title">(.*?)</h4>', html, re.S).group(1)
         title = re.search('<span>(.*?)</span>', title, re.S).group(1)
         title = title.replace('/', ' ').replace('\\', ' ')
-        format_print("the title of course:  {} ".format(title))
+        format_print("the title of course:  {} ".format(title), title)
         base_dir = r"C:\Users\Administrator\Desktop\{}".format(title)
         # 实际课程的URL
         spider_url = re.search('<div class="pull-right lab-item-ctrl">(.*?)</div>', html, re.S).group(1)
         spider_url = re.search('href="(.*?)"', spider_url, re.S).group(1)
         if not os.path.exists(base_dir):
             os.mkdir(base_dir)
-        format_print('dir:{} init success...'.format(base_dir))
+        format_print('dir:{} init success...'.format(base_dir), title)
         os.mkdir(os.path.join(base_dir, 'js'))
         os.mkdir(os.path.join(base_dir, 'css'))
         os.mkdir(os.path.join(base_dir, 'img'))
@@ -71,11 +71,11 @@ class DownPage(object):
         # 完整URL
         full_url = 'http://www.shiyanlou.com{}'.format(spider_url)
         # print("spider_url:{}".format(full_url))
-        return full_url, base_dir
+        return full_url, base_dir, title
 
     # 解析下载课程
-    def do_parse(self, url, base_dir, js_count, css_count, img_count, do_count):
-        format_print('down course\' page {}'.format(do_count))
+    def do_parse(self, url, base_dir, title, js_count, css_count, img_count, do_count):
+        format_print('down course\' page {}'.format(do_count), title)
         html = self.get_page(url)
         # print(html)
         print('down -----> js')
@@ -117,17 +117,24 @@ class DownPage(object):
 
         with open(base_dir + '\{}.html'.format(do_count), 'w', encoding='utf-8') as f:
             f.write(html)
-        format_print('course page {} is down success'.format(do_count))
+        format_print('course page {} is down success'.format(do_count), title)
 
         do_count += 1
         if next_c:
-            self.do_parse(next_url, base_dir, js_count, css_count, img_count, do_count)
+            self.do_parse(next_url, base_dir, js_count, css_count, img_count, do_count, title)
 
     def do_execute(self, url):
-        format_print('down course start   down course start   down course start')
-        real_url, base_dir = self.do_init_of_course(url)
-        self.do_parse(real_url, base_dir, 1, 1, 1, 1)
-        format_print(' down course end     down course end     down course end ')
+        try:
+            real_url, base_dir, title = self.do_init_of_course(url)
+            format_print('down course start   down course start   down course start', title)
+            self.do_parse(real_url, base_dir, title, 1, 1, 1, 1)
+            format_print(' down course end     down course end     down course end ', title)
+        except Exception as e:
+            print('Error............')
+            print('Error............')
+            print('Error............')
+            print(e)
+            format_print('down course defeated')
 
     def do_main(self):
         # v1.4.1
@@ -154,7 +161,6 @@ class DownPage(object):
         queue = 'shiyanlou_spider'
 
         url_list = []
-        print(len(url_list))
         while True:
             i = r.spop(queue)
             if i is None:
@@ -162,9 +168,8 @@ class DownPage(object):
             url = i.decode()
             print(url)
             url_list.append(url)
-        # pool = d_pool(4)
-        # pool.map(self.do_execute, url_list)
-        print(len(url_list))
+        pool = d_pool(4)
+        pool.map(self.do_execute, url_list)
 
 
 if __name__ == '__main__':

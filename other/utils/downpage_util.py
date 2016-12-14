@@ -2,12 +2,15 @@
 # 2016/12/11 0011
 # JEFF
 
-def format_print(str):
+def format_print(str, title=None):
     size = len(str)
     for each in range(size + 4):
         print('- ', end='')
     print()
-    print('  {}'.format(str))
+    if title:
+        print(' |course:{1}| {0}'.format(str, title))
+    if title is None:
+        print('  {}'.format(str))
     for each in range(size + 4):
         print('- ', end='')
     print()

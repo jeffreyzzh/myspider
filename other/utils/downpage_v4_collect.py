@@ -47,7 +47,7 @@ class CollectURL(object):
         next_a = re.search(self.re_r1, html)
         if next_a:
             print(next_a.group(1))
-            url = next_a.group(1)
+            url = next_a.group(1).replace('amp;', '')
             full_url = urllib.parse.urljoin(self.start_url, url)
             print(full_url)
             self.parse_page(full_url)
@@ -66,6 +66,13 @@ class CollectURL(object):
             course_url = urllib.parse.urljoin(self.start_url, href)
             print(course_url)
             self.r.sadd(self.spider_queue, course_url)
+        next_a = re.search(self.re_r1, html)
+        if next_a:
+            print(next_a.group(1))
+            url = next_a.group(1)
+            full_url = urllib.parse.urljoin(self.start_url, url)
+            print(full_url)
+            # self.parse_page(full_url)
 
 
 if __name__ == '__main__':
