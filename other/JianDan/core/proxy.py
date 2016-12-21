@@ -8,7 +8,7 @@ import http.client
 from abc import ABCMeta, abstractmethod
 from urllib.error import URLError, HTTPError
 
-from other.JianDan.core.fetch import build_fetch
+from core.fetch import build_fetch
 
 
 class Proxy(object):

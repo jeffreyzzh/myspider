@@ -11,9 +11,9 @@ from urllib.request import Request
 from urllib.request import urlopen
 import hashlib
 
-from other.JianDan.core.headers import make_headers
-from other.JianDan.core.cache import DiskCache, CacheKeyNotExistError
-from other.JianDan.core.proxy import Proxy
+from core.headers import make_headers
+from core.cache import DiskCache, CacheKeyNotExistError
+from core.proxy import Proxy
 
 
 def build_fetch(use_cache=False, timeout=5, use_cookie=False, proxy=None, mobile=None):

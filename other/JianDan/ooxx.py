@@ -7,9 +7,9 @@ import sys
 import socket
 from urllib.error import URLError, HTTPError
 
-from other.JianDan.core.proxy import MimiProxyFinder, ProxyPool
-from other.JianDan.core.fetch import build_fetch
-from other.JianDan.core.cache import CacheKeyNotExistError, DiskCache
+from core.proxy import MimiProxyFinder, ProxyPool
+from core.fetch import build_fetch
+from core.cache import CacheKeyNotExistError, DiskCache
 
 OOXX_URL = 'https://jiandan.net/ooxx'
 TIMEOUT = 5

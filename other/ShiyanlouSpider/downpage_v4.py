@@ -63,9 +63,15 @@ class DownPage(object):
         if not os.path.exists(base_dir):
             os.mkdir(base_dir)
         format_print('dir:{} init success...'.format(base_dir), title)
-        os.mkdir(os.path.join(base_dir, 'js'))
-        os.mkdir(os.path.join(base_dir, 'css'))
-        os.mkdir(os.path.join(base_dir, 'img'))
+        js_path = os.path.join(base_dir, 'js')
+        if not os.path.exists(js_path):
+            os.mkdir(js_path)
+        css_path = os.path.join(base_dir, 'css')
+        if not os.path.exists(css_path):
+            os.mkdir(css_path)
+        img_path = os.path.join(base_dir, 'img')
+        if not os.path.exists(img_path):
+            os.mkdir(img_path)
         # / courses / 705 / labs / 2299 / document
         # https: // www.shiyanlou.com / courses / 705 / labs / 2299 / document
         # 完整URL
@@ -97,6 +103,7 @@ class DownPage(object):
         print('down -----> img')
         img_list = re.findall('!\[.*?\]\((.*?)\)', html, re.S)
         for img in img_list:
+            print(img)
             with open(base_dir + "\img\{}.png".format(img_count), 'wb')as f:
                 f.write(requests.get(img).content)
             html = html.replace(img, 'img\{}.png'.format(img_count))
@@ -124,17 +131,10 @@ class DownPage(object):
             self.do_parse(next_url, base_dir, js_count, css_count, img_count, do_count, title)
 
     def do_execute(self, url):
-        try:
-            real_url, base_dir, title = self.do_init_of_course(url)
-            format_print('down course start   down course start   down course start', title)
-            self.do_parse(real_url, base_dir, title, 1, 1, 1, 1)
-            format_print(' down course end     down course end     down course end ', title)
-        except Exception as e:
-            print('Error............')
-            print('Error............')
-            print('Error............')
-            print(e)
-            format_print('down course defeated')
+        real_url, base_dir, title = self.do_init_of_course(url)
+        format_print('down course start   down course start   down course start', title)
+        self.do_parse(real_url, base_dir, title, 1, 1, 1, 1)
+        format_print(' down course end     down course end     down course end ', title)
 
     def do_main(self):
         # v1.4.1
@@ -145,31 +145,31 @@ class DownPage(object):
 
         # v 1.4.2
         # 多个URL
-        # url_list = downpage_param.get_spider_list()
-        # for url in url_list:
-        #     self.do_execute(url)
+        url_list = downpage_param.get_spider_list()
+        for url in url_list:
+            self.do_execute(url)
 
-        # v 1.4.3
-        # 多个URL，多线程
-        # url_list = downpage_param.get_spider_list()
-        # pool = d_pool(4)
-        # pool.map(self.do_execute, url_list)
+            # v 1.4.3
+            # 多个URL，多线程
+            # url_list = downpage_param.get_spider_list()
+            # pool = d_pool(4)
+            # pool.map(self.do_execute, url_list)
 
-        # v 1.4.4
-        # 多个URL，多线程，redis队列
-        r = redis.Redis()
-        queue = 'shiyanlou_spider'
-
-        url_list = []
-        while True:
-            i = r.spop(queue)
-            if i is None:
-                break
-            url = i.decode()
-            print(url)
-            url_list.append(url)
-        pool = d_pool(4)
-        pool.map(self.do_execute, url_list)
+            # v 1.4.4
+            # 多个URL，多线程，redis队列
+            # r = redis.Redis()
+            # queue = 'shiyanlou_spider'
+            #
+            # url_list = []
+            # while True:
+            #     i = r.spop(queue)
+            #     if i is None:
+            #         break
+            #     url = i.decode()
+            #     print(url)
+            #     url_list.append(url)
+            # pool = d_pool(4)
+            # pool.map(self.do_execute, url_list)
 
 
 if __name__ == '__main__':
