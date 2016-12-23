@@ -52,6 +52,7 @@ captures/
 *.html
 *.txt
 *.jpg
+*.png
 
 __/.idea/
 _/.idea/
