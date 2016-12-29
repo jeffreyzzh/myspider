@@ -3,7 +3,8 @@
 # JEFF
 
 spider_course_url = [
-    'https://www.shiyanlou.com/courses/708'
+    'https://www.shiyanlou.com/courses/724',
+    'https://www.shiyanlou.com/courses/725'
 ]
 
 

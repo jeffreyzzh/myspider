@@ -22,16 +22,15 @@ class DownPage(object):
         start_url = 'https://www.shiyanlou.com/login'
         response = self.session.get(start_url).content
         html = response.decode()
-        account = input("account:")
-        password = input("password:")
-        csrf = re.search('<input id="csrf_token" name="csrf_token" type="hidden" value="(.*?)">', html, re.S)
-        csrf_token = csrf.group(1)
+        # account = input("account:")
+        # password = input("password:")
+        # csrf = re.search('<input id="csrf_token" name="csrf_token" type="hidden" value="(.*?)">', html, re.S)
+        # csrf_token = csrf.group(1)
         data = {
-            'csrf_token': csrf_token,
-            'next': None,
-            'login': account,
-            'password': password,
-            'submit': '进入实验楼'
+            'login': '124303687@qq.com',
+            'password': 'shan13794070849',
+            'captcha_v': '',
+            'remember': ''
         }
         response = self.session.post(start_url, data=data)
         resp_url = response.url
