@@ -10,7 +10,7 @@ from abc import ABCMeta, abstractmethod
 from urllib.error import HTTPError, URLError
 
 
-class Proxy:
+class Proxy(object):
     def __init__(self, protocol, ip, port):
         self.protocol = protocol
         self.ip = ip
@@ -20,7 +20,7 @@ class Proxy:
         return '{}://{}:{}'.format(self.protocol, self.ip, self.port)
 
 
-class IProxyFinder:
+class IProxyFinder(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -34,7 +34,7 @@ class MimiProxyFinder(IProxyFinder):
         """http://www.mimiip.com/gngao/"""
         self.urls = ['http://www.mimiip.com/gngao/{}'.format(i + 1) for i in range(5)]
 
-    def find(self):
+    def find(self, *args):
         proxies = []
         try:
             # response = requests.get(random.choice(self.urls))
@@ -74,10 +74,38 @@ def judge_proxy(proxy, test_url='http://www.baidu.com'):
     return True
 
 
-miniProxyFinder = MimiProxyFinder()
-proxies = miniProxyFinder.find()
-for proxy in proxies:
-    judge_proxy(proxy)
+# miniProxyFinder = MimiProxyFinder()
+# proxies = miniProxyFinder.find()
+# for proxy in proxies:
+#     judge_proxy(proxy)
+
+# class ProxyPool(object):
+#     def __init__(self, test_url='http://www.baidu.com'):
+#         self.pool = set()
+#         self.test_url = test_url
+#         self.finder = MimiProxyFinder()
+#
+#     def refresh(self):
+#         pass
+#
+#     def _judge_proxy(self, proxy):
+#         pro_name = proxy.assemble()
+#         proxys = {
+#             proxy.protocol: pro_name
+#         }
+#         try:
+#             response = requests.get(self.test_url, proxies=proxys, timeout=3)
+#             if response.status_code != 200:
+#                 print('proxy judge excetion: code != 200')
+#                 return False
+#         except requests.exceptions.RequestException:
+#             print('proxy judge excetion')
+#             return False
+#         print('{} is alive'.format(pro_name))
+#         return True
+#
+# pool = ProxyPool()
+# pool.refresh()
 
 # class Proxy(object):
 #     def __init__(self, protocol, ip, port):
