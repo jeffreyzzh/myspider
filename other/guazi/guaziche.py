@@ -79,14 +79,12 @@ def find_area_by_kedworld(area_name):
     return area if area else 'gz'
 
 
-area = find_area_by_kedworld('傻不拉唧')
-print(area)
+if __name__ == '__main__':
+    area = find_area_by_kedworld('傻不拉唧')
+    print(area)
 
-
-# areas = get_all_area_dict()
-
-
-def get_info_page(area='gz', car_channel='toyota-markx'):
-    """
-    :return:
-    """
+    # areas = get_all_area_dict()
+    def get_info_page(area='gz', car_channel='toyota-markx'):
+        """
+        :return:
+        """
