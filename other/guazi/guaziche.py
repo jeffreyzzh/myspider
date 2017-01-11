@@ -34,7 +34,7 @@ def get_all_area_set():
     alls = soup.select('div.all-city a')
     for each in alls:
         area = each.get('href')
-        area = str(area).replace('/', '')
+        area = str(area).strip()
         areas.add(area)
     return areas
 
@@ -62,29 +62,34 @@ print(k)
 """
 
 
-def get_all_area_dict():
+def get_area_dict():
+    """{'深圳': 'sz'}"""
     area = {}
     resp = requests.get(start_url)
     html = resp.text
     soup = BeautifulSoup(html, 'lxml')
     alls = soup.select('div.all-city a')
     for each in alls:
-        area[each.text.replace(' ', '')] = str(each.get('href')).replace('/', '')
+        area[each.text.strip()] = str(each.get('href')).replace('/', '')
+    return area
+
+
+def get_area_dict2():
+    """{'sz': '深圳'}"""
+    dict = get_area_dict()
+    area = {}
+    for k, v in dict.items():
+        area[v] = k
     return area
 
 
 def find_area_by_kedworld(area_name):
-    areas = get_all_area_dict()
+    areas = get_area_dict()
     area = areas.get(area_name)
     return area if area else 'gz'
 
 
 if __name__ == '__main__':
-    area = find_area_by_kedworld('傻不拉唧')
-    print(area)
-
-    # areas = get_all_area_dict()
-    def get_info_page(area='gz', car_channel='toyota-markx'):
-        """
-        :return:
-        """
+    # area = find_area_by_kedworld('傻不拉唧')
+    # print(area)
+    pass
