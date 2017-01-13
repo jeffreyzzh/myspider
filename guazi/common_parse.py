@@ -49,16 +49,13 @@ class ParsePage(object):
         self.start_url = 'https://www.guazi.com/gz'
         self.car_url = 'https://www.guazi.com/gz/richan'
         self.base_url = 'https://www.guazi.com/{}/{}'
-        self.pool = ProxyPool(test_utl='https://www.guazi.com/gz/dazhong')
 
     def __parse_page(self, url, count=1):
+        print('!!!!!!!!!!!!')
         if count >= 5:
             return
-        proxy = self.pool.get_proxy()
-        dict = proxy.get_proxy_dict()
-        print(dict)
         try:
-            resp = requests.get(url, proxies=dict)
+            resp = requests.get(url, headers=get_ua_dict())
             print(resp.status_code)
             return resp.text
         except Exception as e:
@@ -78,15 +75,15 @@ class ParsePage(object):
             car[name_cn] = new_path
         return car
 
-    def get_type_bycar(self, car="丰田"):
+    def get_type_bycar(self, car="丰田", car_dict=None):
         car_type = {}
-        car_dict = self.get_car()
+        if not car_dict:
+            car_dict = self.get_car()
         value = car_dict.get(car)
         url = self.base_url.format('bj', value)
         print(url)
         c_type = {}
-        cont = self.__parse_page(url)
-        selector = lxml.html.fromstring(cont)
+        selector = lxml.html.fromstring(requests.get(url).text)
         alls = selector.xpath('//dd[@class="clickTagWidget"]//a[@data-gzlog]')
         for each in alls:
             type = each.text.strip()

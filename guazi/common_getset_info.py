@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 # 2017/1/12
+import random
 
 import pymongo
 import time
 from guazi.common_parse import ParsePage
+
+base_url = 'https://www.guazi.com/{}/{}'
 
 
 class GetAndSet(object):
@@ -42,21 +45,21 @@ class GetAndSet(object):
     def get_all_info(self):
         return self.area.find_one(), self.area2.find_one(), self.car.find_one()
 
+    def get_type_bycar_net(self, car="丰田"):
+        car_dict = self.get_car()
+        pass
+
 
 if __name__ == '__main__':
     gs = GetAndSet()
     page = ParsePage()
-    a1, a2, c = gs.get_all_info()
-    for each in c.keys():
-        if each == '_id':
-            break
-        print(each)
-        car_type = page.get_type_bycar(each)
-        print(car_type)
-    # area1, area2, car = page.get_all_info()
-    # gs.set_area(area1, area2)
-    # gs.set_car(car)
-
-    # area1, area2, car = gs.get_all_info()
-    # a = list(area1.keys())
-    # print('惠州' in a)
+    car_dict = gs.get_car()
+    for c in car_dict:
+        if c == '_id':
+            continue
+        print(c)
+        dict = page.get_type_bycar(c)
+        gs.set_car_type(dict)
+        print(dict)
+        print()
+        time.sleep(random.randint(8, 15))
