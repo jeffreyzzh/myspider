@@ -53,9 +53,10 @@ class ParsePage(object):
     def __parse_page(self, url, count=1):
         print('!!!!!!!!!!!!')
         if count >= 5:
+            print(555555555555555555555555555555555555555)
             return
         try:
-            resp = requests.get(url, headers=get_ua_dict())
+            resp = requests.get(url, headers=get_ua_dict(), timeout=5)
             print(resp.status_code)
             return resp.text
         except Exception as e:
@@ -83,7 +84,8 @@ class ParsePage(object):
         url = self.base_url.format('bj', value)
         print(url)
         c_type = {}
-        selector = lxml.html.fromstring(requests.get(url).text)
+        cont = self.__parse_page(url)
+        selector = lxml.html.fromstring(cont)
         alls = selector.xpath('//dd[@class="clickTagWidget"]//a[@data-gzlog]')
         for each in alls:
             type = each.text.strip()
