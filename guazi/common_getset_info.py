@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # 2017/1/12
-import random
 
+import logging
+import random
 import pymongo
 import time
 from guazi.common_parse import ParsePage
@@ -49,17 +50,36 @@ class GetAndSet(object):
         car_dict = self.get_car()
         pass
 
+    def get_mongo_colls(self):
+        return self.area, self.car, self.cartype
+
 
 if __name__ == '__main__':
     gs = GetAndSet()
     page = ParsePage()
     car_dict = gs.get_car()
-    for c in car_dict:
-        if c == '_id':
-            continue
-        print(c)
-        dict = page.get_type_bycar(c)
-        gs.set_car_type(dict)
-        print(dict)
-        print()
-        time.sleep(random.randint(8, 15))
+    area, car, cartype = gs.get_mongo_colls()
+    # for c in car_dict:
+    #     if c == '_id':
+    #         continue
+    #     print(c)
+    #     dict = page.get_type_bycar(c, car_dict)
+    #     gs.set_car_type(dict)
+    #     print(dict)
+    #     sec = random.randint(15, 20)
+    #     print('sleep {}'.format(sec))
+    #     time.sleep(sec)
+
+    for each in car.find():
+        for k, v in each.items():
+            has = cartype.find({k: v})
+            if not list(has):
+                if k == '_id':
+                    continue
+                print(k)
+                dict = page.get_type_bycar(k, car_dict)
+                gs.set_car_type(dict)
+                print(dict)
+                sec = random.randint(15, 20)
+                print('sleep {}'.format(sec))
+                time.sleep(sec)

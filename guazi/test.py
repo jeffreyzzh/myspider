@@ -2,18 +2,15 @@
 # 2017/1/13
 
 # 测试
-import random
+from guazi.common_getset_info import GetAndSet
 
-import requests
-
-url = 'https://www.guazi.com/gz/dazhong'
-
-plist = [
-    # {'https': 'https://106.91.35.241:8998'},
-    # {'https': 'https://183.66.81.178:8998'}
-    {'http': 'http://203.70.11.186'}
-]
-
-resp = requests.get(url, proxies=random.choice(plist), timeout=5)
-print(resp.status_code)
-print(resp.content.decode())
+if __name__ == '__main__':
+    gs = GetAndSet()
+    area, car, cartype = gs.get_mongo_colls()
+    cars = car.find()
+    for each in cars:
+        for k, v in each.items():
+            # print(k, v)
+            has = cartype.find({k: v})
+            if list(has):
+                print(k, v)

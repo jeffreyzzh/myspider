@@ -4,6 +4,7 @@ import logging
 
 import lxml.html
 import requests
+import time
 from bs4 import BeautifulSoup
 from guazi.ua import get_ua_dict
 from guazi.proxy import ProxyPool
@@ -54,13 +55,16 @@ class ParsePage(object):
         print('!!!!!!!!!!!!')
         if count >= 5:
             print(555555555555555555555555555555555555555)
-            return
+            return None
         try:
             resp = requests.get(url, headers=get_ua_dict(), timeout=5)
             print(resp.status_code)
+            if count >= 2:
+                print(resp.text)
             return resp.text
         except Exception as e:
             print(e)
+            time.sleep(15)
             self.__parse_page(url, count=count + 1)
 
     def get_car(self):
@@ -79,12 +83,18 @@ class ParsePage(object):
     def get_type_bycar(self, car="丰田", car_dict=None):
         car_type = {}
         if not car_dict:
+            print('requests get dict...')
             car_dict = self.get_car()
         value = car_dict.get(car)
         url = self.base_url.format('bj', value)
         print(url)
         c_type = {}
         cont = self.__parse_page(url)
+        if cont is None:
+            return {
+                car: value,
+                value: None
+            }
         selector = lxml.html.fromstring(cont)
         alls = selector.xpath('//dd[@class="clickTagWidget"]//a[@data-gzlog]')
         for each in alls:
@@ -92,6 +102,7 @@ class ParsePage(object):
             url = each.get('href').split('/')[2]
             c_type[type] = url
         car_type[value] = c_type
+        car_type[car] = value
         return car_type
 
     def get_area_dict(self):
