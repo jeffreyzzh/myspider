@@ -86,7 +86,7 @@ class ParsePage(object):
             print('requests get dict...')
             car_dict = self.get_car()
         value = car_dict.get(car)
-        url = self.base_url.format('bj', value)
+        url = self.base_url.format('gz', value)
         print(url)
         c_type = {}
         cont = self.__parse_page(url)

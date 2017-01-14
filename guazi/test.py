@@ -12,5 +12,5 @@ if __name__ == '__main__':
         for k, v in each.items():
             # print(k, v)
             has = cartype.find({k: v})
-            if list(has):
+            if not list(has):
                 print(k, v)
