@@ -336,7 +336,8 @@ def get_ua_dict():
         'Cache-Control': 'max-age=0',
         'Connection': 'keep-alive',
         'Host': 'www.guazi.com',
-        'Upgrade-Insecure-Requests': '1'
+        'Upgrade-Insecure-Requests': '1',
+        'Referer': 'https://www.guazi.com/foshan/?ca_s=pz_baidu&ca_n=pz_bt&ca_i=ad&scode=10103000312'
     }
 
 
