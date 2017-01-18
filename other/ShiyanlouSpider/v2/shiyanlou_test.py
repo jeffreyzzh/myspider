@@ -13,3 +13,6 @@ print(len(name))
 # html = bs(html, 'lxml')
 # alls = html.select('a[href="#signin-form"]')
 # print(len(alls))
+
+# driver.execute_script("window.scrollBy(0,200)","")  #向下滚动200px
+# driver.execute_script("window.scrollBy(0,document.body.scrollHeight)","")  #向下滚动到页面底部
