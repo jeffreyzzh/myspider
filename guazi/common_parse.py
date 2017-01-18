@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # 17/1/1
-import logging
+
+import time
 
 import lxml.html
 import requests
-import time
 from bs4 import BeautifulSoup
-from guazi.ua import get_ua_dict
-from guazi.proxy import ProxyPool
+
+from guazi.tool.ua import get_ua_dict
 
 start_url = 'https://www.guazi.com/gz'
 car_url = 'https://www.guazi.com/gz/richan'

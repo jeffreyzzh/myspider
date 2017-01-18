@@ -6,13 +6,12 @@ import random
 import re
 import time
 
-import redis
 import requests
-from other.ShiyanlouSpider.downpage_util import format_print
-from other.ShiyanlouSpider.downpage_util import get_header
-from other.ShiyanlouSpider import downpage_param
-from multiprocessing.dummy import Pool as d_pool
 from requests import Session
+
+from other.ShiyanlouSpider import downpage_param
+from other.ShiyanlouSpider.v1.downpage_util import format_print
+from other.ShiyanlouSpider.v1.downpage_util import get_header
 
 
 class DownPage(object):

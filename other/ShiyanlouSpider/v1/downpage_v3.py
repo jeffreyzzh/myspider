@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # 2016/12/9
 
-import requests
-import re
-import time
 import os
+import re
 import urllib.parse as parse
-from other.ShiyanlouSpider.cookie2dict import MyCookie
+
+import requests
+
+from other.ShiyanlouSpider.v1.cookie2dict import MyCookie
 
 
 class DownPage(object):
