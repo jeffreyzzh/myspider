@@ -337,7 +337,7 @@ def get_ua_dict():
         'Connection': 'keep-alive',
         'Host': 'www.guazi.com',
         'Upgrade-Insecure-Requests': '1',
-        'Referer': 'https://www.guazi.com/foshan/?ca_s=pz_baidu&ca_n=pz_bt&ca_i=ad&scode=10103000312'
+        'Referer': 'https://www.guazi.com/gz/toyota/'
     }
 
 

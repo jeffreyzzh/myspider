@@ -2,8 +2,7 @@
 # 2017/1/17
 
 import requests
-from .settings import RequestSETTING
-from guazi.tool import proxy
+from guazi.settings import RequestSETTING
 from guazi.tool.log import Logger
 from guazi.tool.ua import get_ua_dict as ua_header
 

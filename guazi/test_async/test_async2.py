@@ -3,14 +3,18 @@
 
 import asyncio
 import requests
+import time
 from bs4 import BeautifulSoup as bs
 
 
 async def do_requests(url):
     print('wget url:{}'.format(url))
-    resp = await requests.get(url)
-    # pageencode = resp.encoding
-    # await asyncio.sleep(1)
+    html = await get_request(url)
+    return html
+
+
+async def get_request(url):
+    resp = requests.get(url)
     return resp.text
 
 

@@ -2,7 +2,6 @@
 # 2017/1/12
 
 import pymongo
-from guazi.common_parse import ParsePage
 
 base_url = 'https://www.guazi.com/{}/{}'
 
@@ -84,7 +83,7 @@ class GetAndSet(object):
         # return cartypes
 
     def get_all_info(self):
-        """获取地区，品牌，车型DICT"""
+        """获取地区x2，品牌，车型DICT"""
         return self.area.find_one(), self.area2.find_one(), self.car.find_one(), self.get_car_type()
 
     def get_mongo_colls(self):

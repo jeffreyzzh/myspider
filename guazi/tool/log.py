@@ -11,7 +11,7 @@ class Logger(object):
         self.logger.setLevel(logging.DEBUG)
 
         fh = logging.FileHandler(logname)
-        fh.setLevel(logging.ERROR)
+        fh.setLevel(logging.DEBUG)
 
         ch = logging.StreamHandler()
         ch.setLevel(logging.INFO)

@@ -6,6 +6,7 @@ import time
 import lxml.html
 import requests
 from bs4 import BeautifulSoup
+from guazi.parse.parse_request import Request
 
 from guazi.tool.ua import get_ua_dict
 
@@ -50,22 +51,23 @@ class ParsePage(object):
         self.start_url = 'https://www.guazi.com/gz'
         self.car_url = 'https://www.guazi.com/gz/richan'
         self.base_url = 'https://www.guazi.com/{}/{}'
+        self.request = Request()
 
-    def __parse_page(self, url, count=1):
-        print('!!!!!!!!!!!!')
-        if count >= 5:
-            print(555555555555555555555555555555555555555)
-            return None
-        try:
-            resp = requests.get(url, headers=get_ua_dict(), timeout=5)
-            print(resp.status_code)
-            if count >= 2:
-                print(resp.text)
-            return resp.text
-        except Exception as e:
-            print(e)
-            time.sleep(15)
-            self.__parse_page(url, count=count + 1)
+    # def __parse_page(self, url, count=1):
+    #     print('!!!!!!!!!!!!')
+    #     if count >= 5:
+    #         print(555555555555555555555555555555555555555)
+    #         return None
+    #     try:
+    #         resp = requests.get(url, headers=get_ua_dict(), timeout=5)
+    #         print(resp.status_code)
+    #         if count >= 2:
+    #             print(resp.text)
+    #         return resp.text
+    #     except Exception as e:
+    #         print(e)
+    #         time.sleep(15)
+    #         self.__parse_page(url, count=count + 1)
 
     def get_car(self):
         car = {}
@@ -89,14 +91,16 @@ class ParsePage(object):
         url = self.base_url.format('gz', value)
         print(url)
         c_type = {}
-        cont = self.__parse_page(url)
+        # cont = self.__parse_page(url)
+        cont = self.request.do_getpage(url)
+        print(cont)
         if cont is None:
             return {
                 car: value,
                 value: None
             }
         selector = lxml.html.fromstring(cont)
-        alls = selector.xpath('//dd[@class="clickTagWidget"]//a[@data-gzlog]')
+        alls = selector.xpath('/html/body/div[5]/div[1]/div[1]/dl[2]/dd/div/a[@data-gzlog]')
         for each in alls:
             type = each.text.strip()
             url = each.get('href').split('/')[2]
@@ -146,10 +150,10 @@ class ParsePage(object):
 
 if __name__ == '__main__':
     page = ParsePage()
-    # a, b, c = page.get_all_info()
+    a, b, c = page.get_all_info()
     #
     # print(a)
     # print(b)
     # print(c)
-    car_type = page.get_type_bycar("大众")
+    car_type = page.get_type_bycar("大众", c)
     print(car_type)
