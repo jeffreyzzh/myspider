@@ -2,9 +2,10 @@
 # 2017/1/17
 
 import requests
-from guazi.settings import RequestSETTING
 from guazi.tool.log import Logger
-from guazi.tool.ua import get_ua_dict as ua_header
+
+from guazi.settings import RequestSETTING
+from guazi2.tool.ua import get_ua_dict as ua_header
 
 
 class Request(object):

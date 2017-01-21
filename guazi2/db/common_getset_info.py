@@ -2,8 +2,7 @@
 # 2017/1/12
 
 import pymongo
-
-from guazi2.tool import log_current_date
+from guazi2.tool.time_tool import log_current_date
 
 base_url = 'https://www.guazi.com/{}/{}'
 

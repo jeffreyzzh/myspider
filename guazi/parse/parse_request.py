@@ -3,10 +3,11 @@
 # JEFF
 
 import requests
-import guazi.proxy.proxy_handle as p_h
-from guazi.tool.ua import get_ua_dict
-from guazi.settings import RequestSETTING, EXCEPTIONINFO
 from guazi.tool.log import Logger
+
+import guazi.proxy.proxy_handle as p_h
+from guazi.settings import RequestSETTING, EXCEPTIONINFO
+from guazi2.tool.ua import get_ua_dict
 
 
 def requesturl(url):

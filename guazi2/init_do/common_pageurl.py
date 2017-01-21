@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # 2017/1/13
 
-from guazi.db.common_getset_info import GetAndSet
+from guazi2.db.common_getset_info import GetAndSet
 
 base_url = 'https://www.guazi.com/{}/{}'
 

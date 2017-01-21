@@ -2,7 +2,7 @@
 # 2017/1/10
 
 import logging
-from guazi.tool.time_tool import *
+from guazi2.tool.time_tool import log_current_date
 
 
 class Logger(object):

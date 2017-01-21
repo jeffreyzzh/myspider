@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # 17/1/1
 
+import time
+
 import lxml.html
 import requests
 from bs4 import BeautifulSoup
-
-from guazi.parse.parse_request import Request
 
 start_url = 'https://www.guazi.com/gz'
 car_url = 'https://www.guazi.com/gz/richan'
@@ -48,7 +48,6 @@ class ParsePage(object):
         self.start_url = 'https://www.guazi.com/gz'
         self.car_url = 'https://www.guazi.com/gz/richan'
         self.base_url = 'https://www.guazi.com/{}/{}'
-        self.request = Request()
 
     # def __parse_page(self, url, count=1):
     #     print('!!!!!!!!!!!!')
@@ -89,8 +88,9 @@ class ParsePage(object):
         print(url)
         c_type = {}
         # cont = self.__parse_page(url)
-        cont = self.request.do_getpage(url)
-        print(cont)
+        resp = requests.get(url)
+        resp.encoding = 'utf-8'
+        cont = resp.text
         if cont is None:
             return {
                 car: value,

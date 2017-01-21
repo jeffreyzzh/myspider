@@ -9,7 +9,7 @@ import lxml.html
 
 from guazi.parse.parse_request import requesturl
 from guazi.settings import RequestSETTING
-from guazi.tool.log import Logger
+from guazi2.tool.log import Logger
 
 
 class CarUrlParse(object):
@@ -71,7 +71,7 @@ class CarUrlParse(object):
 
 if __name__ == '__main__':
     start = time.time()
-    url = 'https://www.guazi.com/gz/dazhong/'
+    url = 'https://www.guazi.com/gz/hafei'
     page = CarUrlParse(url)
     page.do_main()
     print(page.get_linkscount())

@@ -2,8 +2,6 @@
 # 2017/1/17
 # author = JEFF
 
-from guazi.tool.time_tool import *
-
 
 class RequestSETTING(object):
     REQUEST_LOGFILE_NAME = '{}request.log'.format(log_current_date())
