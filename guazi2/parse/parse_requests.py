@@ -4,13 +4,13 @@
 import requests
 import json
 from guazi2.tool.ua import get_ua_dict
-from guazi2.tool.log import Logger
+from guazi2.tool.log import logger
 from guazi2.tool.time_tool import log_current_date
 
 
 class GuaziRequest(object):
     def __init__(self):
-        self.logger = Logger('{}.log'.format(log_current_date()), 'guazi').get_logger()
+        self.logger = logger
 
     def get_one_proxy(self):
         r = requests.get('http://127.0.0.1:8000/?types=0&count=1')
@@ -36,4 +36,6 @@ class GuaziRequest(object):
 
 
 if __name__ == '__main__':
-    pass
+    gr = GuaziRequest()
+    html = gr.do_requests('https://www.guazi.com/gz/honda/')
+    print(html)

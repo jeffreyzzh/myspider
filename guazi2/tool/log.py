@@ -28,6 +28,8 @@ class Logger(object):
         return self.logger
 
 
+logger = Logger('{}.log'.format(log_current_date()), 'guazi').get_logger()
+
 if __name__ == '__main__':
     logger = Logger('{}.log'.format(log_current_date()), 'splog').get_logger()
     logger.info('xxxx')
