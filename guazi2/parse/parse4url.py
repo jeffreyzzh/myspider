@@ -18,6 +18,7 @@ class GuaziParse(object):
         self.request = GuaziRequest()
         self.queue = queue.Queue()
         self.parse_list = []
+        self.xpath_expression = '//p[@class="infoBox"]/a[@baidu_alog="pc_list_xiangqingye&click&pc_list_xiangqingye_c"]/@href'
 
     def put_url(self, url):
         self.queue.put(url)
@@ -38,12 +39,16 @@ class GuaziParse(object):
 
     def parse_carpage(self, html, url):
         if not html:
+            print('no html!!!!!!!!!!!!!!')
+            print('no html!!!!!!!!!!!!!!')
+            print('no html!!!!!!!!!!!!!!')
+            print('no html!!!!!!!!!!!!!!')
+            print('no html!!!!!!!!!!!!!!')
             return None
+        # print(html)
         verify_key = url.split('.com')[1][0:3]
         selector = lxml.html.fromstring(html)
-        cars = selector.xpath(
-            '//p[@class="infoBox"]/a[@baidu_alog="pc_list_xiangqingye&click&pc_list_xiangqingye_c"]/@href'
-        )
+        cars = selector.xpath(self.xpath_expression)
         for car in cars:
             if not car.startswith(verify_key):
                 continue

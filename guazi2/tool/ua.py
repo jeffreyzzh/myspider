@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # 2017/1/10
 import random
+import uuid
 
 window = [
     'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.0.249.0 Safari/532.5',
@@ -337,10 +338,20 @@ def get_ua_dict():
         'Connection': 'keep-alive',
         'Host': 'www.guazi.com',
         'Upgrade-Insecure-Requests': '1',
-        'Referer': 'https://www.guazi.com/gz/toyota/'
+        'Referer': 'https://www.guazi.com/gz/toyota/',
+        # 'Cookie': 'uuid=194b71a6-04c9-4914-d88b-c3865185c890; ganji_uuid=1762490679921835426371;'
+        'Cookie': 'uuid={}; ganji_uuid=1762490679921835426371;'.format(uuid.uuid4())
     }
 
 
 if __name__ == '__main__':
-    print(get_ua())
-    print(get_ua_dict())
+    # print(get_ua())
+    # print(get_ua_dict())
+    a = uuid.UUID
+    print(a)
+
+    print(uuid.uuid1())
+    print(uuid.uuid4())
+
+    # print(uuid.uuid3('xxx', '123'))
+    # print(uuid.uuid5('xxx', '123'))
