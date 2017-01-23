@@ -14,6 +14,7 @@ class GetAndSet(object):
         carcoll = '_car'
         cartypecoll = '_car_type'
         urls = '{}_urls'.format(log_current_date())
+        items = '{}_items'.format(log_current_date())
         client = pymongo.MongoClient()
         self.db = client[dbname]
         self.area = self.db[collname + areacoll]
@@ -21,6 +22,7 @@ class GetAndSet(object):
         self.car = self.db[collname + carcoll]
         self.cartype = self.db[collname + cartypecoll]
         self.carurls = self.db[urls]
+        self.items = self.db[items]
 
     def set_area(self, area1, area2=None):
         """插入地区"""
@@ -94,7 +96,15 @@ class GetAndSet(object):
         return self.area, self.car, self.cartype
 
     def get_mongo_dayurls(self):
+        """URL mongo coll object"""
         return self.carurls
+
+    def get_mongo_dayitems(self):
+        """
+        ITEMS mongo coll object
+        :return:
+        """
+        return self.items
 
 
 if __name__ == '__main__':
