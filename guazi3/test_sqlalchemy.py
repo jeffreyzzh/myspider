@@ -18,4 +18,20 @@ class Item(Base):
     since = Column(String(10))
     mileage = Column(String(10))
     gearbox = Column(String(5))
-    emission_standard = Column(String())
+    emission_standard = Column(String(5))
+    location = Column(String(5))
+    owner = Column(String(5))
+    description = Column(String(200))
+    spider_time = Column(String(20))
+    spider_url = Column(String(50))
+
+
+engine = create_engine('mysql+mysqlconnector://root:root@192.168.1.112:3306/guazi_items')
+
+DBSession = sessionmaker(bind=engine)
+
+session = DBSession()
+item = session.query(Item).filter(Item.id == '5').one()
+
+print(item.owner)
+session.close()
