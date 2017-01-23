@@ -10,18 +10,32 @@ from guazi2.tool.time_tool import log_current_date
 
 
 class GuaziRequest(object):
-    def __init__(self):
+    def __init__(self, isproxy=True):
         self.logger = logger
         self.re_code = re.compile('<input class="code-input" placeholder="请输入验证码" name="verification_code">', re.S)
         self.down_img = re.compile('<img class="code-img" src="(.*?)"></img>', re.S)
         self.proxy_list = []
         self.get_proxies()
+        self.isproxy = isproxy
 
     def get_one_proxy(self):
+        if len(self.proxy_list) <= 1:
+            self.refresh_proxypool()
         return random.choice(self.proxy_list)
 
     def get_proxies(self):
-        r = requests.get('http://127.0.0.1:8000/?types=0&count=30')
+        r = requests.get('http://127.0.0.1:8000/?types=0&count=60')
+        ip_ports = json.loads(r.text)
+        for uip in ip_ports:
+            ip_dict = {
+                'http': 'http://{}:{}'.format(uip[0], uip[1]),
+                'https': 'https://{}:{}'.format(uip[0], uip[1])
+            }
+            self.proxy_list.append(ip_dict)
+
+    def refresh_proxypool(self):
+        self.proxy_list.clear()
+        r = requests.get('http://127.0.0.1:8000/?types=0&count=60')
         ip_ports = json.loads(r.text)
         for uip in ip_ports:
             ip_dict = {
@@ -32,15 +46,21 @@ class GuaziRequest(object):
 
     def del_one_proxy(self, proxies):
         unuse_ip = proxies['http'].replace('http://', '').split(':')[0]
+        self.proxy_list.remove(proxies)
         requests.get('http://127.0.0.1:8000/delete?ip={}'.format(unuse_ip))
+        if len(self.proxy_list) <= 10:
+            self.refresh_proxypool()
 
     def do_requests(self, url, count=1):
         if count >= 5:
             self.logger.error('{} to much error...'.format(url))
             return None
         try:
-            proxies = self.get_one_proxy()
-            print(proxies)
+            if self.isproxy:
+                proxies = self.get_one_proxy()
+                print(proxies)
+            else:
+                proxies = None
             resp = requests.get(url, proxies=proxies, headers=get_ua_dict(), timeout=5)
             if resp.status_code != 200:
                 return self.do_requests(url, count=count)

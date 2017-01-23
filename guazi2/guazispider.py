@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # 2017/1/21
+import queue
 
 from guazi2.parse.parse4url import GuaziParse
 import time
@@ -38,14 +39,17 @@ def dotest(*urls):
 if __name__ == '__main__':
     start = time.time()
 
-    # links = [u for u in coll_all_links()]
-    # pool = Pool()
-    # pool.map(do_parse, links)
+    gp = GuaziParse()
+    links = [u for u in coll_all_links()]
+    for each in links:
+        gp.put_url(each)
+
+    gp.carpage()
 
     # for each in coll_all_links():
     #     do_parse(each)
     #     break
 
-    dotest('https://www.guazi.com/gz/honda/', 'https://www.guazi.com/gz/audi')
+    # dotest('https://www.guazi.com/gz/honda/', 'https://www.guazi.com/gz/audi')
 
     print(time.time() - start)
