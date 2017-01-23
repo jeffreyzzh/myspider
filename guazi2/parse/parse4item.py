@@ -25,8 +25,10 @@ class GuaziItemParse(object):
 
     def init_spider_list(self):
         urls = self.url_coll.find()
-        for u in urls:
-            print(u)
+        url_list = [u['url'] for u in urls]
+
+        for each in url_list:
+            print(each)
 
 
 if __name__ == '__main__':
