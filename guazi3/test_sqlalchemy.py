@@ -26,7 +26,7 @@ class Item(Base):
     spider_url = Column(String(50))
 
 
-engine = create_engine('mysql+mysqlconnector://root:root@192.168.1.112:3306/guazi_items')
+engine = create_engine('mysql+mysqlconnector://root:root@localhost:3306/guazi_items')
 
 DBSession = sessionmaker(bind=engine)
 
