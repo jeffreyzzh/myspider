@@ -340,7 +340,7 @@ def get_ua_dict():
         'Upgrade-Insecure-Requests': '1',
         'Referer': 'https://www.guazi.com/gz/toyota/',
         # 'Cookie': 'uuid=194b71a6-04c9-4914-d88b-c3865185c890; ganji_uuid=1762490679921835426371;'
-        'Cookie': 'uuid={}; ganji_uuid=1762490679921835426371;'.format(uuid.uuid4())
+        'Cookie': 'uuid={}; ganji_uuid=1762490679921835426371;sha bi'.format(uuid.uuid4())
     }
 
 

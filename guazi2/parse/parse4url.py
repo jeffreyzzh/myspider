@@ -30,7 +30,7 @@ class GuaziParse(object):
     def carpage(self):
         while True:
             try:
-                time.sleep(random.randint(1, 2))
+                time.sleep(20)
                 url = self.queue.get(True, timeout=10)
                 print('----' * 6, url)
                 html = self.request.do_requests(url)
