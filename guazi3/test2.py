@@ -48,3 +48,42 @@ if __name__ == '__main__':
          28, 67, 1, 7, 75, 4, 29, 5, 9, 7, 20, 6, 14, 105, 12, 12, 5, 51, 7, 4, 1, 5, 8, 6, 1, 13, 64, 3, 73, 5, 9, 23,
          3, 4, 1, 10, 106, 2, 25, 19, 38, 52, 12, 5, 1, 1, 8, 3, 3, 1, 2]
     print(find_max(a, 4))
+
+    listx = [
+        "广州",
+        "深圳",
+        "珠海",
+        "汕头",
+        "佛山",
+        "韶关",
+        "湛江",
+        "肇庆",
+        "江门",
+        "茂名",
+        "惠州",
+        "梅州",
+        "汕尾",
+        "河源",
+        "阳江",
+        "清远",
+        "东莞",
+        "中山",
+        "潮州",
+        "揭阳",
+        "云浮"
+    ]
+
+    import pymongo
+
+    client = pymongo.MongoClient()
+    db = client['guazi']
+    coll = db['default_info_area']
+    area_dict = {}
+    for a in coll.find():
+        area_info = a
+        for x in listx:
+            try:
+                area_dict[x] = area_info[x]
+            except KeyError:
+                pass
+    print(area_dict)

@@ -47,6 +47,18 @@ class GetAndSet(object):
             dict = page_object.get_type_bycar(k, cars)
             self.cartype.insert(dict)
 
+    def get_gd_area(self):
+        """返回所有广东城市"""
+        return {'佛山': 'foshan',
+                '深圳': 'sz',
+                '广州': 'gz',
+                '珠海': 'zhuhai',
+                '东莞': 'dg',
+                '中山': 'zhongshan',
+                '江门': 'jiangmen',
+                '汕头': 'shantou',
+                '惠州': 'huizhou'}
+
     def get_area(self):
         """获取地区 area1:{'深圳': 'sz'}"""
         return self.area.find_one()

@@ -19,6 +19,14 @@ def coll_all_links():
         yield url
 
 
+def coll_all_links2():
+    for a in gs.get_gd_area():
+        if a != '_id':
+            for car in cars:
+                url = pu.get_path(area=a, car=car)
+                yield url
+
+
 def do_parse(url):
     # gp = GuaziParse(url)
     # gp.carpage()
@@ -39,17 +47,13 @@ def dotest(*urls):
 if __name__ == '__main__':
     start = time.time()
 
-    gp = GuaziParse(isproxy=False)
-    links = [u for u in coll_all_links()]
+    gp = GuaziParse(isproxy=True)
+    links = [u for u in coll_all_links2()]
     for each in links:
         gp.put_url(each)
 
     gp.carpage()
 
-    # for each in coll_all_links():
-    #     do_parse(each)
-    #     break
-
-    # dotest('https://www.guazi.com/gz/honda/', 'https://www.guazi.com/gz/audi')
+    # coll_all_links2()
 
     print(time.time() - start)
