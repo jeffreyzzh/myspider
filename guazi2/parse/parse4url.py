@@ -30,7 +30,7 @@ class GuaziParse(object):
     def carpage(self):
         while True:
             try:
-                time.sleep(20)
+                time.sleep(random.randint(15, 30))
                 url = self.queue.get(True, timeout=10)
                 print('----' * 6, url)
                 html = self.request.do_requests(url)
@@ -59,7 +59,7 @@ class GuaziParse(object):
             if not car.startswith(verify_key):
                 continue
             full_url = urljoin(url, car)
-            self.url_coll.insert({'url':full_url})
+            self.url_coll.insert({'url': full_url})
             print(full_url)
 
             # self.parse_list.append(urljoin(url, car))
