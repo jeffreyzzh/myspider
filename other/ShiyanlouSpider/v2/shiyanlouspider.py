@@ -2,6 +2,7 @@
 # 2017/1/18
 import time
 import json
+import lxml.html
 from other.ShiyanlouSpider.v2.shiyanlou_settings import spider_list
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -18,8 +19,9 @@ def main():
     login(driver)
     time.sleep(1)
 
-    driver.find_element_by_css_selector(
-        'body > div.container.layout.layout-margin-top > div > div.col-md-9.layout-body > div.content.position-relative > div.row > div:nth-child(4) > a > div.course-img > img').click()
+    driver.find_element_by_xpath(
+        '/html/body/div[1]/div/div[1]/div[2]/div[4]/div[1]/a/div[3]/span'
+    ).click()
     time.sleep(3)
 
     parse_course(driver)
@@ -29,7 +31,20 @@ def main():
 
 
 def parse_course(driver):
-    pass
+    html = driver.page_source
+    init_dir(html)
+
+    driver.find_element_by_xpath('//*[@id="labs"]/div[1]/div[4]/a[1]').click()
+    for i in range(5):
+        driver.execute_script('window.scrollTo(0, document.body.scrollHeight)')
+        time.sleep(1)
+    html = driver.page_source
+
+
+def init_dir(html):
+    selector = lxml.html.fromstring(html)
+    title = selector.xpath('//h4[@class="pull-left course-infobox-title"]/span[2]/text()')
+    print(title)
 
 
 def get_user_info():

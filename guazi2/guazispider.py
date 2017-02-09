@@ -47,7 +47,7 @@ def dotest(*urls):
 if __name__ == '__main__':
     start = time.time()
 
-    gp = GuaziParse(isproxy=True)
+    gp = GuaziParse(isproxy=False)
     links = [u for u in coll_all_links2()]
     for each in links:
         gp.put_url(each)
