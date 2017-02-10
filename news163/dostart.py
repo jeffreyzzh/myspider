@@ -104,6 +104,8 @@ class News163Spider(object):
                 'newstype': newstype,
                 'channelname': channelname
             }
+            for each in self.hot_comment(commenturl):
+                dict_info['comment'] = each
             news.append(dict_info)
         return news
 
@@ -170,15 +172,16 @@ if __name__ == '__main__':
     start = time.time()
 
     s = News163Spider()
-    # s.ajax_news()
+    ns = s.ajax_news()
+    print(ns)
     # s.new_comment('http://comment.news.163.com/news_shehui7_bbs/CCQTHRHV0001875P.html')
     # s.hot_comment('http://comment.news.163.com/news_shehui7_bbs/CCQTHRHV0001875P.html')
     # a = s.hot_comment('http://comment.news.163.com/news_shehui7_bbs/CCQQK59U0001875P.html')
     # for each in a:
     #     print(each)
-    news = s.ajax_news()
-    for i in news:
-        for each in s.hot_comment(i['commenturl']):
-            s.logger.info(each)
+    # news = s.ajax_news()
+    # for i in news:
+    #     for each in s.hot_comment(i['commenturl']):
+    #         s.logger.info(each)
 
     print('{0:.6f}'.format(time.time() - start))
