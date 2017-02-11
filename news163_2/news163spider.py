@@ -42,7 +42,7 @@ class News163Spider(object):
         #         j['spider_time'] = TimeTool.current_time()
         #         self.handler.handler_ajax_new(new=j)
 
-    def do_url(self, url):
+    def dospider_ajax_url(self, url):
         cont = self.downer.ajax_fetch(url)
         jsons = self.parser.parse_ajax_channel(cont)
         for j in jsons:
