@@ -3,6 +3,8 @@
 
 import time
 
+from multiprocessing.dummy import Pool
+
 from news163_2.tools.common_tools import TimeTool
 from news163_2.codes.spider_base import BaseClass
 from news163_2.codes.spider_datahandler import gethandler
@@ -22,21 +24,39 @@ class News163Spider(object):
 
     def ajax_news(self):
         ajax_urls = self.manager.ajax_list_by_channel('shehui')
-        for url in ajax_urls:
-            cont = self.downer.ajax_fetch(url)
-            jsons = self.parser.parse_ajax_channel(cont)
-            for j in jsons:
-                hot_url = self.manager.hotcomment_ajax_by_commenturl(j['commenturl'])
-                comment = self.downer.page_fetch(hot_url)
-                try:
-                    comment_dict = self.parser.parser_hotcomment(comment)
-                except Exception as e:
-                    self.logger.error(e)
-                    self.logger.error('url: {} has a problem'.format(url))
-                else:
-                    j['comment'] = comment_dict if comment_dict else None
-                j['spider_time'] = TimeTool.current_time()
-                self.handler.handler_ajax_new(new=j)
+        pool = Pool()
+        pool.map(self.do_url, ajax_urls)
+        # for url in ajax_urls:
+        #     cont = self.downer.ajax_fetch(url)
+        #     jsons = self.parser.parse_ajax_channel(cont)
+        #     for j in jsons:
+        #         hot_url = self.manager.hotcomment_ajax_by_commenturl(j['commenturl'])
+        #         comment = self.downer.page_fetch(hot_url)
+        #         try:
+        #             comment_dict = self.parser.parser_hotcomment(comment)
+        #         except Exception as e:
+        #             self.logger.error(e)
+        #             self.logger.error('url: {} has a problem'.format(url))
+        #         else:
+        #             j['comment'] = comment_dict if comment_dict else None
+        #         j['spider_time'] = TimeTool.current_time()
+        #         self.handler.handler_ajax_new(new=j)
+
+    def do_url(self, url):
+        cont = self.downer.ajax_fetch(url)
+        jsons = self.parser.parse_ajax_channel(cont)
+        for j in jsons:
+            hot_url = self.manager.hotcomment_ajax_by_commenturl(j['commenturl'])
+            comment = self.downer.page_fetch(hot_url)
+            try:
+                comment_dict = self.parser.parser_hotcomment(comment)
+            except Exception as e:
+                self.logger.error(e)
+                self.logger.error('url: {} has a problem'.format(url))
+            else:
+                j['comment'] = comment_dict if comment_dict else None
+            j['spider_time'] = TimeTool.current_time()
+            self.handler.handler_ajax_new(new=j)
 
 
 if __name__ == '__main__':
