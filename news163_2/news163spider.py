@@ -25,7 +25,7 @@ class News163Spider(object):
     def ajax_news(self):
         ajax_urls = self.manager.ajax_list_by_channel('shehui')
         pool = Pool()
-        pool.map(self.do_url, ajax_urls)
+        pool.map(self.dospider_ajax_url, ajax_urls)
         # for url in ajax_urls:
         #     cont = self.downer.ajax_fetch(url)
         #     jsons = self.parser.parse_ajax_channel(cont)
