@@ -1,56 +1,51 @@
 # -*- coding: utf-8 -*-
 # 2017/2/10
 
-import json
-import re
 import time
 
-from news163_2.spider_downer import getdowner
-from news163_2.spider_logger import getlogger
+from news163_2.tools.common_tools import TimeTool
+from news163_2.codes.spider_base import BaseClass
+from news163_2.codes.spider_datahandler import gethandler
+from news163_2.codes.spider_manager import geturlmanager
+from news163_2.codes.spider_parser import getparser
+
+from news163_2.codes.spider_downer import getdowner
 
 
 class News163Spider(object):
     def __init__(self):
-        self.logger = getlogger()
+        self.logger = BaseClass.getlogger()
+        self.manager = geturlmanager()
         self.downer = getdowner()
+        self.parser = getparser()
+        self.handler = gethandler()
 
-    regex_dict = {
-        'cont': re.compile('(\[.*\])', re.S),
-        'titles': re.compile('"title":"(.*?)"', re.S),
-        'docurls': re.compile('"docurl":"(.*?)"', re.S),
-        'commenturls': re.compile('"commenturl":"(.*?)"', re.S),
-        'timeums': re.compile('"tienum":(.*?),', re.S),
-        'tlinks': re.compile('"tlink":"(.*?)"', re.S),
-        'labels': re.compile('"label":"(.*?)"', re.S),
-        'o_keywords': re.compile('"keywords":\[\s*(.*?)\s*\],', re.S),
-        'times': re.compile('"time":"(.*?)"', re.S),
-        'newstypes': re.compile('"newstype":"(.*?)"', re.S),
-        'channelnames': re.compile('"channelname":"(.*?)"', re.S)
-    }
-
-    URL = 'http://news.163.com/shehui/'
-    AJAX_URL = 'http://temp.163.com/special/00804KVA/cm_{}.js'
-    AJAX_URLS = 'http://temp.163.com/special/00804KVA/cm_{}_0{}.js'
-    HOT_COMMENT_URL = 'http://comment.news.163.com/api/v1/products/a2869674571f77b5a0867c3d71db5856/threads/{}/comments/hotList?limit=20'
-
-    def ajax_list(self, channel='shehui'):
-        urls = []
-        urls.append(self.AJAX_URL.format(channel))
-        for i in range(2, 9):
-            urls.append(self.AJAX_URLS.format(channel, i))
-        return urls
-
-    def fetch_ajax_by_channel(self, channel='shehui'):
-        spider_lists = self.ajax_list(channel)
-        return spider_lists
+    def ajax_news(self):
+        ajax_urls = self.manager.ajax_list_by_channel('shehui')
+        for url in ajax_urls:
+            cont = self.downer.ajax_fetch(url)
+            jsons = self.parser.parse_ajax_channel(cont)
+            for j in jsons:
+                hot_url = self.manager.hotcomment_ajax_by_commenturl(j['commenturl'])
+                comment = self.downer.page_fetch(hot_url)
+                try:
+                    comment_dict = self.parser.parser_hotcomment(comment)
+                except Exception as e:
+                    self.logger.error(e)
+                    self.logger.error('url: {} has a problem'.format(url))
+                else:
+                    j['comment'] = comment_dict if comment_dict else None
+                j['spider_time'] = TimeTool.current_time()
+                self.handler.handler_ajax_new(new=j)
 
 
 if __name__ == '__main__':
     start = time.time()
 
     n = News163Spider()
-    for i in n.fetch_ajax_by_channel('guoji'):
-        cont = n.downer.ajax_fetch(i)
-        print(cont)
+    # for i in n.fetch_ajax_by_channel('guoji'):
+    #     cont = n.downer.ajax_fetch(i)
+    #     print(cont)
+    n.ajax_news()
 
     print('{0:.6f}'.format(time.time() - start))

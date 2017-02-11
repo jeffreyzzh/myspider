@@ -3,13 +3,13 @@
 
 import requests
 
-from news163_2.spider_logger import getlogger
+from news163_2.codes.spider_base import BaseClass
 
 
 # URL下载器
 class URLdowner(object):
     def __init__(self):
-        self.logger = getlogger()
+        self.logger = BaseClass.getlogger()
 
     def ajax_fetch(self, url):
         return self.fetch(url, 'gbk')
@@ -37,4 +37,4 @@ def getdowner():
 
 if __name__ == '__main__':
     u = URLdowner()
-    u.logger.error(123)
+    u.logger.error(1234)
