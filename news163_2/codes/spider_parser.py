@@ -72,15 +72,17 @@ class URLparser(object):
             news.append(dict_info)
         return news
 
-    def parser_hotcomment(self, cont, j):
+    def parser_hotcomment(self, cont):
         if not cont:
             return None
         dict_json = json.loads(cont)
-        # 先判断是否没有评论
-        if len(dict_json) <= 2:
-            return None
+        result_info = dict()
         comment_list = list()
-        if not dict_json['comments']:
+        if dict_json.get('code') == '40106':
+            return None
+        if dict_json.get('message') == 'Thread is closed':
+            return None
+        if not dict_json.get('comments'):
             return None
         for k, v in dict_json['comments'].items():
             comment_info = dict()
@@ -91,18 +93,11 @@ class URLparser(object):
             comment_info['commentId'] = v['commentId']
             comment_info['location'] = v['user']['location']
             comment_info['createTime'] = v['createTime']
-            try:
-                comment_info['nickname'] = v['user']['nickname']
-            except KeyError:
-                comment_info['nickname'] = 'niming'
+            comment_info['nickname'] = v.get('user').get('nickname')
             comment_list.append(comment_info)
-        j['hotcomment_list'] = comment_list
-        try:
-            j['hotcomment_size'] = dict_json['newListSize']
-        except KeyError:
-            j['hotcomment_size'] = len(comment_list)
-        j['spider_time'] = TimeTool.current_time()
-        return j
+        result_info['comments'] = comment_list
+        result_info['newListSize'] = dict_json.get('newListSize') if dict_json.get('newListSize') else len(comment_list)
+        return result_info
 
 
 def getparser():

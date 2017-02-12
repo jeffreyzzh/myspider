@@ -36,7 +36,7 @@ class News163Spider(object):
                 comment_dict = self.parser.parser_hotcomment(comment)
             except Exception as e:
                 self.logger.error(e)
-                self.logger.error('url: {} has a problem'.format(url))
+                self.logger.error('url: {} has a problem'.format(hot_url))
             else:
                 j['comment'] = comment_dict if comment_dict else None
             j['spider_time'] = TimeTool.current_time()
