@@ -10,7 +10,6 @@ from news163_2.codes.spider_base import BaseClass
 from news163_2.codes.spider_datahandler import gethandler
 from news163_2.codes.spider_manager import geturlmanager
 from news163_2.codes.spider_parser import getparser
-
 from news163_2.codes.spider_downer import getdowner
 
 

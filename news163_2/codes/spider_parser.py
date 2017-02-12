@@ -5,6 +5,7 @@ import json
 import re
 
 from news163_2.codes.spider_base import BaseClass
+from news163_2.tools.common_tools import TimeTool
 
 
 class URLparser(object):
@@ -71,14 +72,13 @@ class URLparser(object):
             news.append(dict_info)
         return news
 
-    def parser_hotcomment(self, cont):
+    def parser_hotcomment(self, cont, j):
         if not cont:
             return None
         dict_json = json.loads(cont)
         # 先判断是否没有评论
         if len(dict_json) <= 2:
             return None
-        result_info = dict()
         comment_list = list()
         if not dict_json['comments']:
             return None
@@ -96,12 +96,13 @@ class URLparser(object):
             except KeyError:
                 comment_info['nickname'] = 'niming'
             comment_list.append(comment_info)
-        result_info['comments'] = comment_list
+        j['hotcomment_list'] = comment_list
         try:
-            result_info['newListSize'] = dict_json['newListSize']
+            j['hotcomment_size'] = dict_json['newListSize']
         except KeyError:
-            result_info['newListSize'] = len(comment_list)
-        return result_info
+            j['hotcomment_size'] = len(comment_list)
+        j['spider_time'] = TimeTool.current_time()
+        return j
 
 
 def getparser():

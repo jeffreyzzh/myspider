@@ -10,7 +10,7 @@ def log_current_date():
 
 
 class Logger(object):
-    def __init__(self, logname='{}.log'.format(log_current_date()), log='163news'):
+    def __init__(self, logname='{}.log'.format(log_current_date()), log='[163news]'):
         self.logger = logging.getLogger(log)
         self.logger.setLevel(logging.DEBUG)
 
