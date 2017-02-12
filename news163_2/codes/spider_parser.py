@@ -72,32 +72,38 @@ class URLparser(object):
             news.append(dict_info)
         return news
 
-    def parser_hotcomment(self, cont):
+    def parser_hotcomment(self, cont, url):
         if not cont:
             return None
-        dict_json = json.loads(cont)
-        result_info = dict()
-        comment_list = list()
-        if dict_json.get('code') == '40106':
+        try:
+            dict_json = json.loads(cont)
+            result_info = dict()
+            comment_list = list()
+            if dict_json.get('code') == '40106':
+                return None
+            if dict_json.get('message') == 'Thread is closed':
+                return None
+            if not dict_json.get('comments'):
+                return None
+            for k, v in dict_json['comments'].items():
+                comment_info = dict()
+                comment_info['content'] = v['content']
+                comment_info['ip'] = v['ip']
+                comment_info['vote'] = v['vote']
+                comment_info['against'] = v['against']
+                comment_info['commentId'] = v['commentId']
+                comment_info['location'] = v['user']['location']
+                comment_info['createTime'] = v['createTime']
+                comment_info['nickname'] = v.get('user').get('nickname')
+                comment_list.append(comment_info)
+            result_info['comments'] = comment_list
+            result_info['newListSize'] = dict_json.get('newListSize') if dict_json.get('newListSize') else len(
+                comment_list)
+            return result_info
+        except Exception as e:
+            self.logger.log(e)
+            self.logger.error('url: {} has a problem'.format(url))
             return None
-        if dict_json.get('message') == 'Thread is closed':
-            return None
-        if not dict_json.get('comments'):
-            return None
-        for k, v in dict_json['comments'].items():
-            comment_info = dict()
-            comment_info['content'] = v['content']
-            comment_info['ip'] = v['ip']
-            comment_info['vote'] = v['vote']
-            comment_info['against'] = v['against']
-            comment_info['commentId'] = v['commentId']
-            comment_info['location'] = v['user']['location']
-            comment_info['createTime'] = v['createTime']
-            comment_info['nickname'] = v.get('user').get('nickname')
-            comment_list.append(comment_info)
-        result_info['comments'] = comment_list
-        result_info['newListSize'] = dict_json.get('newListSize') if dict_json.get('newListSize') else len(comment_list)
-        return result_info
 
 
 def getparser():

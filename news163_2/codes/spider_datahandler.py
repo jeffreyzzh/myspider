@@ -13,16 +13,23 @@ class Darahandler(object):
         self.logger = BaseClass.getlogger()
         client = pymongo.MongoClient()
         db = client[settings.MONGODBNAME]
-        self.coll = db[
-            settings.COLLECTNAME.format(
-                TimeTool.format_time(format_spec=settings.MONGO_USE_DATE_SPECS)
-            )
-        ]
+        self.shehui_coll = db[settings.COLLECTNAME.format('shehui')]
+        self.guoji_coll = db[settings.COLLECTNAME.format('guoji')]
+        self.guonei_coll = db[settings.COLLECTNAME.format('guonei')]
+        self.other_coll = db[settings.COLLECTNAME.format('other')]
 
     def handler_ajax_new(self, new):
         if not new or not isinstance(new, dict):
             print('false')
-        self.coll.insert(new)
+        channelname = new.get('channelname')
+        if channelname == 'shehui':
+            self.shehui_coll.insert(new)
+        elif channelname == 'guoji':
+            self.guoji_coll.insert(new)
+        elif channelname == 'guonei':
+            self.guonei_coll.insert(new)
+        else:
+            self.other_coll.insert(new)
         self.logger.info('mongodb insert {}'.format(new))
 
 

@@ -30,17 +30,17 @@ class News163Spider(object):
         cont = self.downer.ajax_fetch(url)
         jsons = self.parser.parse_ajax_channel(cont)
         for j in jsons:
-            hot_url = self.manager.hotcomment_ajax_by_commenturl(j['commenturl'])
-            comment = self.downer.page_fetch(hot_url)
-            try:
-                comment_dict = self.parser.parser_hotcomment(comment)
-            except Exception as e:
-                self.logger.error(e)
-                self.logger.error('url: {} has a problem'.format(hot_url))
-            else:
-                j['comment'] = comment_dict if comment_dict else None
-            j['spider_time'] = TimeTool.current_time()
-            self.handler.handler_ajax_new(new=j)
+            # 对要进行的URL进行过滤去重
+            commenturl = j['commenturl']
+            self.handler_commenturl(commenturl=commenturl, j=j)
+
+    def handler_commenturl(self, commenturl, j):
+        hot_url = self.manager.hotcomment_ajax_by_commenturl(commenturl)
+        comment = self.downer.page_fetch(hot_url)
+        comment_dict = self.parser.parser_hotcomment(comment, hot_url)
+        j['comment'] = comment_dict if comment_dict else None
+        j['spider_time'] = TimeTool.current_time()
+        self.handler.handler_ajax_new(new=j)
 
 
 if __name__ == '__main__':
