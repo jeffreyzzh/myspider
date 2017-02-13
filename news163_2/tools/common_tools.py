@@ -2,6 +2,8 @@
 # 2017/2/11 0011
 # JEFF
 import time
+import pymongo
+from news163_2 import settings
 
 
 class TimeTool(object):
@@ -16,6 +18,19 @@ class TimeTool(object):
         if spec_simple:
             return time.strftime('%Y-%m-%d')
         return time.strftime(format_spec, time.localtime(timex))
+
+
+class DbTool(object):
+    client = pymongo.MongoClient()
+    DB = client[settings.MONGODBNAME]
+
+    @staticmethod
+    def get_mongocoll_by_channel(channel=None):
+        if not channel:
+            return DbTool.DB['other_coll']
+        if channel not in settings.CHANNEL_LIST:
+            return DbTool.DB['other_coll']
+        return DbTool.DB[settings.COLLECTNAME.format(channel)]
 
 
 if __name__ == '__main__':

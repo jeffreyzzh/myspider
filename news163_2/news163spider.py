@@ -22,17 +22,20 @@ class News163Spider(object):
         self.handler = gethandler()
 
     def ajax_news(self):
-        ajax_urls = self.manager.ajax_list_by_channel('shehui')
+        ajax_urls = self.manager.ajax_list_by_channel('guonei')
         pool = Pool()
         pool.map(self.dospider_ajax_url, ajax_urls)
 
     def dospider_ajax_url(self, url):
         cont = self.downer.ajax_fetch(url)
         jsons = self.parser.parse_ajax_channel(cont)
+        channelname = jsons[0].get('channelname')
+        filter_list = self.manager.commenturl_filterlist_by_channel(channelname)
         for j in jsons:
             # 对要进行的URL进行过滤去重
             commenturl = j['commenturl']
-            self.handler_commenturl(commenturl=commenturl, j=j)
+            if commenturl not in filter_list:
+                self.handler_commenturl(commenturl=commenturl, j=j)
 
     def handler_commenturl(self, commenturl, j):
         hot_url = self.manager.hotcomment_ajax_by_commenturl(commenturl)

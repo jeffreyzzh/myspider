@@ -40,16 +40,19 @@ class URLparser(object):
         times = re.findall(self.regex_dict['times'], cont)
         newstypes = re.findall(self.regex_dict['newstypes'], cont)
         channelnames = re.findall(self.regex_dict['channelnames'], cont)
-        keywords = []
+        keywords = list()
         for key in o_keywords:
-            key = key.replace(' ', '')
-            k_infos = key.split('\n,')
-            n_infos = []
-            for each in k_infos:
-                each = each.replace('${type}', 'news.163.com')
-                each_dict = json.loads(each)
-                n_infos.append(each_dict)
-            keywords.append(n_infos)
+            try:
+                key = key.replace(' ', '')
+                k_infos = key.split('\n,')
+                n_infos = []
+                for each in k_infos:
+                    each = each.replace('${type}', 'news.163.com')
+                    each_dict = json.loads(each)
+                    n_infos.append(each_dict)
+                keywords.append(n_infos)
+            except Exception as e:
+                self.logger.error(e)
 
         news = []
         for title, docurl, commenturl, timeum, tlink, label, keyword, time, newstype, channelname in zip(

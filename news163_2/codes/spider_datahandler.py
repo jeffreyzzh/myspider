@@ -4,19 +4,23 @@
 
 import pymongo
 from news163_2.codes.spider_base import BaseClass
-from news163_2.tools.common_tools import TimeTool
+from news163_2.tools.common_tools import TimeTool, DbTool
 from news163_2 import settings
 
 
 class Darahandler(object):
     def __init__(self):
         self.logger = BaseClass.getlogger()
-        client = pymongo.MongoClient()
-        db = client[settings.MONGODBNAME]
-        self.shehui_coll = db[settings.COLLECTNAME.format('shehui')]
-        self.guoji_coll = db[settings.COLLECTNAME.format('guoji')]
-        self.guonei_coll = db[settings.COLLECTNAME.format('guonei')]
-        self.other_coll = db[settings.COLLECTNAME.format('other')]
+        # client = pymongo.MongoClient()
+        # db = client[settings.MONGODBNAME]
+        # self.shehui_coll = db[settings.COLLECTNAME.format('shehui')]
+        # self.guoji_coll = db[settings.COLLECTNAME.format('guoji')]
+        # self.guonei_coll = db[settings.COLLECTNAME.format('guonei')]
+        # self.other_coll = db[settings.COLLECTNAME.format('other')]
+        self.shehui_coll = DbTool.get_mongocoll_by_channel('shehui')
+        self.guoji_coll = DbTool.get_mongocoll_by_channel('guoji')
+        self.guonei_coll = DbTool.get_mongocoll_by_channel('guonei')
+        self.other_coll = DbTool.get_mongocoll_by_channel('other')
 
     def handler_ajax_new(self, new):
         if not new or not isinstance(new, dict):
