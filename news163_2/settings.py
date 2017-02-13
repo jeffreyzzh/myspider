@@ -7,7 +7,8 @@ COLLECTNAME = '{}_coll'  # channel
 CHANNEL_LIST = [
     'shehui',
     'guoji',
-    'guonei'
+    'guonei',
+    'other'
 ]
 
 MONGO_USE_DATE_SPECS = '%Y%m%d'

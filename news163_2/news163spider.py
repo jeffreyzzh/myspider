@@ -4,7 +4,7 @@
 import time
 
 from multiprocessing.dummy import Pool
-
+from news163_2 import settings
 from news163_2.tools.common_tools import TimeTool
 from news163_2.codes.spider_base import BaseClass
 from news163_2.codes.spider_datahandler import gethandler
@@ -21,14 +21,16 @@ class News163Spider(object):
         self.parser = getparser()
         self.handler = gethandler()
 
-    def ajax_news(self):
-        ajax_urls = self.manager.ajax_list_by_channel('guonei')
+    def ajax_news(self, channel='shehui'):
+        ajax_urls = self.manager.ajax_list_by_channel(channel)
         pool = Pool()
         pool.map(self.dospider_ajax_url, ajax_urls)
 
     def dospider_ajax_url(self, url):
         cont = self.downer.ajax_fetch(url)
         jsons = self.parser.parse_ajax_channel(cont)
+        if not jsons:
+            return
         channelname = jsons[0].get('channelname')
         filter_list = self.manager.commenturl_filterlist_by_channel(channelname)
         for j in jsons:
@@ -45,11 +47,18 @@ class News163Spider(object):
         j['spider_time'] = TimeTool.current_time()
         self.handler.handler_ajax_new(new=j)
 
+    def domain(self):
+        self.ajax_news('shehui')
+        for i in settings.CHANNEL_LIST:
+            if i == 'other':
+                continue
+            self.ajax_news(i)
+
 
 if __name__ == '__main__':
     start = time.time()
 
     n = News163Spider()
-    n.ajax_news()
+    n.domain()
 
     print('{0:.6f}'.format(time.time() - start))
