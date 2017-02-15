@@ -7,10 +7,13 @@ from news163_2.tools.common_tools import DbTool
 
 class URLmanager(object):
     URL = 'http://news.163.com/shehui/'
-    AJAX_URL = 'http://temp.163.com/special/00804KVA/cm_{}.js'
-    AJAX_URLS = 'http://temp.163.com/special/00804KVA/cm_{}_0{}.js'  # max 8
     HOT_COMMENT_URL = 'http://comment.news.163.com/api/v1/products/a2869674571f77b5a0867c3d71db5856/threads/{}/comments/hotList?limit=20'
 
+    # 普通新闻
+    AJAX_URL = 'http://temp.163.com/special/00804KVA/cm_{}.js'
+    AJAX_URLS = 'http://temp.163.com/special/00804KVA/cm_{}_0{}.js'  # max 8
+
+    # 体育相关
     SPORT_AJAX_URL = 'http://sports.163.com/special/000587PR/newsdata_n_index.js'
     SPORT_AJAX_URLS = 'http://sports.163.com/special/000587PR/newsdata_n_index_0{}.js'  # max 9
     SPORT_AJAX_M_URL = 'http://sports.163.com/special/000587PR/newsdata_n_index_10.js'
@@ -22,17 +25,42 @@ class URLmanager(object):
     # NBA_AJAX_URLS = 'http://sports.163.com/special/000587PK/newsdata_nba_index_0{}.js'  # max 9
     # NBA_AJAX_M_URL = 'http://sports.163.com/special/000587PK/newsdata_nba_index_10.js'
 
-    CBA_AJXA_URL = 'http://sports.163.com/special/000587PR/newsdata_n_cba.js'
-    CBA_AJXA_URLS = 'http://sports.163.com/special/000587PR/newsdata_n_cba_0{}.js'  # max 5
+    SPORT_CBA_AJXA_URL = 'http://sports.163.com/special/000587PR/newsdata_n_cba.js'
+    SPORT_CBA_AJXA_URLS = 'http://sports.163.com/special/000587PR/newsdata_n_cba_0{}.js'  # max 5
 
-    NBA_AJXA_URL = 'http://sports.163.com/special/000587PR/newsdata_n_nba.js'
-    NBA_AJXA_URLS = 'http://sports.163.com/special/000587PR/newsdata_n_nba_0{}.js'  # max 5
+    SPORT_NBA_AJXA_URL = 'http://sports.163.com/special/000587PR/newsdata_n_nba.js'
+    SPORT_NBA_AJXA_URLS = 'http://sports.163.com/special/000587PR/newsdata_n_nba_0{}.js'  # max 5
 
-    GNFB_AJAX_URL = 'http://sports.163.com/special/000587PR/newsdata_n_china.js'
-    GNFB_AJAX_URLS = 'http://sports.163.com/special/000587PR/newsdata_n_china_0{}.js'  # max 5
+    SPORT_GNFB_AJAX_URL = 'http://sports.163.com/special/000587PR/newsdata_n_china.js'
+    SPORT_GNFB_AJAX_URLS = 'http://sports.163.com/special/000587PR/newsdata_n_china_0{}.js'  # max 5
 
-    GJFB_AJAX_URL = 'http://sports.163.com/special/000587PR/newsdata_n_world.js'
-    GJFB_AJAX_URLS = 'http://sports.163.com/special/000587PR/newsdata_n_world_0{}.js'  # max 5
+    SPORT_GJFB_AJAX_URL = 'http://sports.163.com/special/000587PR/newsdata_n_world.js'
+    SPORT_GJFB_AJAX_URLS = 'http://sports.163.com/special/000587PR/newsdata_n_world_0{}.js'  # max 5
+
+    # 娱乐相关
+    YULE_AJAX_URL = 'http://ent.163.com/special/000380VU/newsdata_index.js'
+    YULE_YL_AJAX_URLS = 'http://ent.163.com/special/000380VU/newsdata_index_0{}.js'  # max 9
+    YULE_YL_AJAX_M_URL = 'http://ent.163.com/special/000380VU/newsdata_index_10.js'
+
+    YULE_MX_URL = 'http://ent.163.com/special/000380VU/newsdata_star.js'
+    YULE_MX_URLS = 'http://ent.163.com/special/000380VU/newsdata_star_0{}.js'  # max9
+    YULE_MX_M_URL = 'http://ent.163.com/special/000380VU/newsdata_star_10.js'
+
+    YULE_MOVIE_URL = 'http://ent.163.com/special/000380VU/newsdata_movie.js'
+    YULE_MOVIE_URLS = 'http://ent.163.com/special/000380VU/newsdata_movie_0{}.js'  # max 9
+    YULE_MOVIE_M_URL = 'http://ent.163.com/special/000380VU/newsdata_movie_10.js'
+
+    YULE_TV_URL = 'http://ent.163.com/special/000380VU/newsdata_tv.js'
+    YULE_TV_URLS = 'http://ent.163.com/special/000380VU/newsdata_tv_0{}.js'  # max 9
+    YULE_TV_M_URL = 'http://ent.163.com/special/000380VU/newsdata_tv_10.js'
+
+    YULE_ZY_URL = 'http://ent.163.com/special/000380VU/newsdata_show.js'
+    YULE_ZY_URLS = 'http://ent.163.com/special/000380VU/newsdata_show_0{}.js'  # max 9
+    YULE_ZY_M_URL = 'http://ent.163.com/special/000380VU/newsdata_show_10.js'
+
+    YULE_MUSIC_URL = 'http://ent.163.com/special/000380VU/newsdata_music.js'
+    YULE_MUSIC_URLS = 'http://ent.163.com/special/000380VU/newsdata_music_0{}.js'  # max 9
+    YULE_MUSIC_M_URL = 'http://ent.163.com/special/000380VU/newsdata_music_10.js'
 
     def __init__(self):
         pass
