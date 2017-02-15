@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # 2017/2/10
 
+import os
 import logging
 import time
 
@@ -10,11 +11,12 @@ def log_current_date():
 
 
 class Logger(object):
-    def __init__(self, logname='{}.log'.format(log_current_date()), log='[163news]'):
+    def __init__(self, log='[163news]'):
         self.logger = logging.getLogger(log)
         self.logger.setLevel(logging.DEBUG)
+        self.logname = self.init_logsdir()
 
-        fh = logging.FileHandler(logname)
+        fh = logging.FileHandler(self.logname)
         fh.setLevel(logging.ERROR)
 
         ch = logging.StreamHandler()
@@ -30,6 +32,13 @@ class Logger(object):
 
     def get_logger(self):
         return self.logger
+
+    def init_logsdir(self):
+        program_path = os.path.split(os.path.abspath('.'))[0]
+        logspath = os.path.join(program_path, 'logs')
+        if not os.path.exists(logspath):
+            os.mkdir(logspath)
+        return os.path.join(logspath, '{}.log'.format(log_current_date()))
 
 
 def getlogger():
