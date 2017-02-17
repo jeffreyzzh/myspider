@@ -5,10 +5,13 @@ MONGODBNAME = '163news'
 COLLECTNAME = '{}_coll'  # channel
 
 CHANNEL_LIST = [
-    'shehui',
-    'guoji',
-    'guonei',
-    'other'
+    'temp',
+    'sport',
+    'ent',
+    'money',
+    'tech',
+    'lady',
+    'edu'
 ]
 
 MONGO_USE_DATE_SPECS = '%Y%m%d'
