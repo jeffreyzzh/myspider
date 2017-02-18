@@ -114,24 +114,12 @@ class URLmanager(object):
         new_num = re.search('bbs/(.*?)\.html', commenturl)
         return self.NEW_COMMENT_URL.format(new_num.group(1), nums)
 
-    #######################################################
-
-    def ajax_list_by_channel(self, channel='shehui'):
-        urls = list()
-        urls.append(self.AJAX_URL.format(channel))
-        for i in range(2, 9):
-            urls.append(self.AJAX_URLS.format(channel, i))
-        return urls
-
-    def ajxa_news(self):
-        pass
-
     def commenturl_filterlist_by_channel(self, channel):
         channel_coll = DbTool.get_mongocoll_by_channel(channel)
         urls = channel_coll.find({}, {'commenturl': 1, '_id': 0})
         result_list = list()
         for i in urls:
-            result_list.append(i.get('commenturl'))
+            result_list.append(self.commenturl_filter_remark(i.get('commenturl')))
         return result_list
 
     def commenturl_filter_remark(self, commenturl):
@@ -156,10 +144,8 @@ if __name__ == '__main__':
     # print(i)
     # k = m.newcomment_ajax_by_commenturl(comment_url)
     # print(k)
-    channel = 'shehui'
-    filter_list = m.commenturl_filterlist_by_channel(channel)
-    print(len(filter_list))
-    remark_set = set()
-    for i in filter_list:
-        remark_set.add(m.commenturl_filter_remark(i))
-    print(len(filter_list) == len(remark_set))
+
+
+    # channel = 'shehui'
+    # filter_list = m.commenturl_filterlist_by_channel(channel)
+    # print(filter_list)
