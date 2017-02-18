@@ -107,11 +107,11 @@ class URLmanager(object):
         return result
 
     def hotcomment_ajax_by_commenturl(self, commenturl, nums=40):
-        new_num = re.search('bbs/(.*?)\.html', commenturl)
+        new_num = re.search(self.regex_dict['filter_remark'], commenturl)
         return self.HOT_COMMENT_URL.format(new_num.group(1), nums)
 
     def newcomment_ajax_by_commenturl(self, commenturl, nums=10):
-        new_num = re.search('bbs/(.*?)\.html', commenturl)
+        new_num = re.search(self.regex_dict['filter_remark'], commenturl)
         return self.NEW_COMMENT_URL.format(new_num.group(1), nums)
 
     def commenturl_filterlist_by_channel(self, channel):
@@ -139,11 +139,11 @@ if __name__ == '__main__':
     #     print(k)
     #     print(v)
 
-    # comment_url = 'http://comment.sports.163.com/sports2_bbs/CDI6AGOT0005877U.html'
-    # i = m.hotcomment_ajax_by_commenturl(comment_url, 40)
-    # print(i)
-    # k = m.newcomment_ajax_by_commenturl(comment_url)
-    # print(k)
+    comment_url = 'http://comment.sports.163.com/sports2_bbs/CDI6AGOT0005877U.html'
+    i = m.hotcomment_ajax_by_commenturl(comment_url, 40)
+    print(i)
+    k = m.newcomment_ajax_by_commenturl(comment_url)
+    print(k)
 
 
     # channel = 'shehui'

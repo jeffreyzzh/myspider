@@ -3,45 +3,55 @@
 # JEFF
 
 import pymongo
+import sys
+
 from news163_2.codes.spider_base import BaseClass
 from news163_2.tools.common_tools import TimeTool, DbTool
 from news163_2 import settings
 
 
-class Darahandler(object):
-    def __init__(self):
+class Datahandler(object):
+    def __init__(self, host='localhost', port=27017, dbname='163news'):
         self.logger = BaseClass.getlogger()
-        self.shehui_coll = DbTool.get_mongocoll_by_channel('shehui')
-        self.guoji_coll = DbTool.get_mongocoll_by_channel('guoji')
-        self.guonei_coll = DbTool.get_mongocoll_by_channel('guonei')
-        self.other_coll = DbTool.get_mongocoll_by_channel('other')
-        self.coll_dict = self.init_colls()
-
-    def init_colls(self):
-        mongo_colls = dict()
-        for i in settings.CHANNEL_LIST:
-            mongo_colls[i] = DbTool.get_mongocoll_by_channel(i)
-        return mongo_colls
+        client = pymongo.MongoClient(host=host, port=port)
+        db = client[dbname]
+        self.shehui = db['shehui_coll']
+        self.guoji = db['guoji_coll']
+        self.guonei = db['guonei_coll']
+        self.sport = db['sport_coll']
+        self.ent = db['ent_coll']
+        self.money = db['money_coll']
+        self.tech = db['tech_coll']
+        self.lady = db['lady_coll']
+        self.edu = db['edu_coll']
+        self.coll = {
+            'shehui': self.shehui,
+            'guoji': self.guoji,
+            'guonei': self.guonei,
+            'sport': self.sport,
+            'ent': self.ent,
+            'money': self.money,
+            'tech': self.tech,
+            'lady': self.lady,
+            'edu': self.edu,
+        }
 
     def handler_ajax_new(self, new):
         if not new or not isinstance(new, dict):
-            print('false')
+            sys.stdout.write('data is empty')
+            sys.stdout.flush()
         channelname = new.get('channelname')
-        channel_coll = self.coll_dict.get(channelname)
-        if channel_coll:
-            channel_coll.insert(new)
-        else:
-            self.other_coll.insert(new)
-        self.logger.info('mongodb insert {}'.format(new))
+        self.coll.get(channelname).insert(new)
+
+    def test_read(self, coll):
+        for i in coll.find().limit(100):
+            print(i)
 
 
 def gethandler():
-    return Darahandler()
+    return Datahandler()
 
 
 if __name__ == '__main__':
-    dh = Darahandler()
-    d = dh.init_colls()
-    for k, v in d.items():
-        print(k)
-        print(v.find().count())
+    dh = Datahandler()
+    dh.test_read(dh.shehui)

@@ -100,8 +100,8 @@ class URLparser(object):
                 comment_info['nickname'] = v.get('user').get('nickname')
                 comment_list.append(comment_info)
             result_info['comments'] = comment_list
-            result_info['newListSize'] = dict_json.get('newListSize') if dict_json.get('newListSize') else len(
-                comment_list)
+            result_info['newListSize'] = \
+                dict_json.get('newListSize') if dict_json.get('newListSize') else len(comment_list)
             return result_info
         except Exception as e:
             self.logger.log(e)

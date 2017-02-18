@@ -17,8 +17,10 @@ class URLdowner(object):
     def page_fetch(self, url):
         return self.fetch(url, 'utf-8')
 
-    def fetch(self, url, encoding):
-        self.logger.info(url)
+    def fetch(self, url, encoding, counts=1):
+        if counts >= 5:
+            self.logger.error('{} crawl to many'.format(url))
+            return None
         try:
             r = requests.get(url, timeout=3)  # 在这里抓取页面
             r.encoding = encoding
@@ -28,7 +30,7 @@ class URLdowner(object):
                 self.logger.error('url: {} 404 Not Found')
         except Exception as e:
             self.logger.error(e)
-            return None
+            return self.fetch(url, encoding, counts=counts + 1)
 
 
 def getdowner():
@@ -37,4 +39,5 @@ def getdowner():
 
 if __name__ == '__main__':
     u = URLdowner()
-    u.logger.error(1234)
+    cont = u.ajax_fetch('http://temp.163.com/special/00804KVA/cm_shehui.js')
+    print(cont)
