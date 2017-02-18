@@ -3,10 +3,14 @@
 # JEFF
 import re
 from news163_2.tools.common_tools import DbTool
-from news163_3.settings import CHANNEL_LIST as channel_list
+from news163_3.settings import CHANNEL_LIST
 
 
 class URLmanager(object):
+    regex_dict = {
+        'filter_remark': re.compile('bbs/(.*?)\.html')
+    }
+
     CRAWL_URLS = {
         'temp': {
             'channels': ['shehui', 'guoji', 'guonei'],
@@ -65,19 +69,50 @@ class URLmanager(object):
     HOT_COMMENT_URL = 'http://comment.news.163.com/api/v1/products/a2869674571f77b5a0867c3d71db5856/threads/{}/comments/hotList?limit={}'
     NEW_COMMENT_URL = 'http://comment.news.163.com/api/v1/products/a2869674571f77b5a0867c3d71db5856/threads/{}/comments/newList?limit={}'
 
-    def ajaxlist_by_crawl_channels(self, channels):
-        result = list()
+    def ajaxdict_by_crawl_channels(self, channels):
+        """
+        对普通新闻做特殊处理，每个子频道是一个独立的存储dict，
+        其他的大频道对应一个存储dict
+        :param channels: 频道列表
+        :return: ajax_list_dict
+        """
+        result = dict()
         for channel in channels:
-            channelinfo = self.CRAWL_URLS.get(channel)
-            child_channels = channelinfo.get('channels')
-            maxtimes = channelinfo.get('max')
-            ajax_url = channelinfo.get('ajax_url')
-            ajax_urls = channelinfo.get('ajax_urls')
-            for x in child_channels:
-                result.append(ajax_url.format(x))
-                for y in range(2, maxtimes + 1):
-                    result.append(ajax_urls.format(x, y))
+            if channel != 'temp':
+                return_list = list()
+                channelinfo = self.CRAWL_URLS.get(channel)
+                if not channelinfo:
+                    continue
+                child_channels = channelinfo.get('channels')
+                maxtimes = channelinfo.get('max')
+                ajax_url = channelinfo.get('ajax_url')
+                ajax_urls = channelinfo.get('ajax_urls')
+                for x in child_channels:
+                    return_list.append(ajax_url.format(x))
+                    for y in range(2, maxtimes + 1):
+                        return_list.append(ajax_urls.format(x, y))
+                result[channel] = return_list
+            else:
+                channelinfo = self.CRAWL_URLS.get(channel)
+                child_channels = channelinfo.get('channels')
+                maxtimes = channelinfo.get('max')
+                ajax_url = channelinfo.get('ajax_url')
+                ajax_urls = channelinfo.get('ajax_urls')
+                for x in child_channels:
+                    list2 = list()
+                    list2.append(ajax_url.format(x))
+                    for y in range(2, maxtimes + 1):
+                        list2.append(ajax_urls.format(x, y))
+                    result[x] = list2
         return result
+
+    def hotcomment_ajax_by_commenturl(self, commenturl, nums=40):
+        new_num = re.search('bbs/(.*?)\.html', commenturl)
+        return self.HOT_COMMENT_URL.format(new_num.group(1), nums)
+
+    def newcomment_ajax_by_commenturl(self, commenturl, nums=10):
+        new_num = re.search('bbs/(.*?)\.html', commenturl)
+        return self.NEW_COMMENT_URL.format(new_num.group(1), nums)
 
     #######################################################
 
@@ -87,10 +122,6 @@ class URLmanager(object):
         for i in range(2, 9):
             urls.append(self.AJAX_URLS.format(channel, i))
         return urls
-
-    def hotcomment_ajax_by_commenturl(self, commenturl):
-        new_num = re.search('bbs/(.*?)\.html', commenturl)
-        return self.HOT_COMMENT_URL.format(new_num.group(1))
 
     def ajxa_news(self):
         pass
@@ -103,6 +134,10 @@ class URLmanager(object):
             result_list.append(i.get('commenturl'))
         return result_list
 
+    def commenturl_filter_remark(self, commenturl):
+        new_num = re.search(self.regex_dict['filter_remark'], commenturl)
+        return new_num.group(1)
+
 
 def geturlmanager():
     return URLmanager()
@@ -110,6 +145,21 @@ def geturlmanager():
 
 if __name__ == '__main__':
     m = geturlmanager()
-    s = m.ajaxlist_by_crawl_channels(channels=channel_list)
-    for e in s:
-        print(e)
+    # channel_list = ['temp', 'lady']
+    # s = m.ajaxdict_by_crawl_channels(channels=channel_list)
+    # for k, v in s.items():
+    #     print(k)
+    #     print(v)
+
+    # comment_url = 'http://comment.sports.163.com/sports2_bbs/CDI6AGOT0005877U.html'
+    # i = m.hotcomment_ajax_by_commenturl(comment_url, 40)
+    # print(i)
+    # k = m.newcomment_ajax_by_commenturl(comment_url)
+    # print(k)
+    channel = 'shehui'
+    filter_list = m.commenturl_filterlist_by_channel(channel)
+    print(len(filter_list))
+    remark_set = set()
+    for i in filter_list:
+        remark_set.add(m.commenturl_filter_remark(i))
+    print(len(filter_list) == len(remark_set))

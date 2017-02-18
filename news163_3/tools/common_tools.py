@@ -25,11 +25,7 @@ class DbTool(object):
     DB = client[settings.MONGODBNAME]
 
     @staticmethod
-    def get_mongocoll_by_channel(channel=None):
-        if not channel:
-            return DbTool.DB['other_coll']
-        if channel not in settings.CHANNEL_LIST:
-            return DbTool.DB['other_coll']
+    def get_mongocoll_by_channel(channel):
         return DbTool.DB[settings.COLLECTNAME.format(channel)]
 
 
