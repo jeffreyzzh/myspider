@@ -20,7 +20,8 @@ class URLparser(object):
         'o_keywords': re.compile('"keywords":\[\s*(.*?)\s*\],', re.S),
         'times': re.compile('"time":"(.*?)"', re.S),
         'newstypes': re.compile('"newstype":"(.*?)"', re.S),
-        'channelnames': re.compile('"channelname":"(.*?)"', re.S)
+        'channelnames': re.compile('"channelname":"(.*?)"', re.S),
+        'filter_remark': re.compile('bbs/(.*?)\.html')
     }
 
     def __init__(self):
@@ -70,8 +71,8 @@ class URLparser(object):
                 'newstype': newstype,
                 'channelname': channelname
             }
-            # for each in self.hot_comment(commenturl):
-            #     dict_info['comment'] = each
+            filter_remark = re.search(self.regex_dict['filter_remark'], commenturl)
+            dict_info['filter_remark'] = filter_remark.group(1)
             news.append(dict_info)
         return news
 
