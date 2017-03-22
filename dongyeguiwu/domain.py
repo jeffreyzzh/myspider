@@ -29,6 +29,10 @@ def handlebook(bookurl):
         print(each.text)
 
 
+def full_url(rurl, page):
+    return rurl + '/' + str(page)
+
+
 def handlechapter(chapterurl):
     chapter_page = downpage(chapterurl)
     selector = etree.HTML(chapter_page)
@@ -36,21 +40,21 @@ def handlechapter(chapterurl):
     have_fenye = selector.xpath('//div[@class="fenye"]')
     if have_fenye:
         # 有分页
-        fenyes = have_fenye[0].xpath('./a')
-        for page in range(2, len(fenyes)):
-            print(page)
         ps = selector.xpath('//div[@class="text"]//p')
         for each in ps:
             print(each.text)
+        fenyes = have_fenye[0].xpath('./a')
+        for page in range(2, len(fenyes)):
+            fenye_html = downpage(full_url(chapter_url, page))
+            xpaths = etree.HTML(fenye_html)
+            ps = xpaths.xpath('//div[@class="text"]//p')
+            for each in ps:
+                print(each.text)
     else:
         # 无分页,直接处理
         ps = selector.xpath('//div[@class="text"]//p')
         for each in ps:
             print(each.text)
-
-
-def handlepagedetail(page_url):
-    page_detail = downpage(page_url)
 
 
 if __name__ == '__main__':
@@ -60,6 +64,6 @@ if __name__ == '__main__':
     # url2 = 'http://www.dongyeguiwu.com/books/x'
     # handlebook(url2)
 
-    chapter_url = 'http://www.dongyeguiwu.com/books/baiyexing/53.html'
+    chapter_url = 'http://www.dongyeguiwu.com/books/baiyexing/65.html'
     handlechapter(chapter_url)
     pass
