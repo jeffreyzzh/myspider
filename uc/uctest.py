@@ -7,25 +7,28 @@ import time
 from spiderutils.copyheaders2dict import get_headers
 from uc.UcStore import UCstore
 from multiprocessing import Queue, Process
+import aiohttp
+import asyncio
 # from threading import Thread
-
 import queue
 
 index_url = 'http://go.uc.cn/page/godcomment/shenpinglun'
-news_url = 'http://napi.uc.cn/3/classes/news_comments/categories/neirong/lists/617?_app_id=03b70b8484ae418789ebfec8ffa64820&_fetch=1&_max_age=1&_fetch_incrs=1&_size=10'
-next_news_url = 'http://napi.uc.cn/3/classes/news_comments/categories/neirong/lists/617?_app_id=03b70b8484ae418789ebfec8ffa64820&_fetch=1&_max_age=1&_fetch_incrs=1&_size=10&_max_pos={}'
+# news_url = 'http://napi.uc.cn/3/classes/news_comments/categories/neirong/lists/617?_app_id=03b70b8484ae418789ebfec8ffa64820&_fetch=1&_max_age=1&_fetch_incrs=1&_size=10'
+# next_news_url = 'http://napi.uc.cn/3/classes/news_comments/categories/neirong/lists/617?_app_id=03b70b8484ae418789ebfec8ffa64820&_fetch=1&_max_age=1&_fetch_incrs=1&_size=10&_max_pos={}'
+news_url = 'http://napi.uc.cn/3/classes/news_comments/categories/neirong/lists/617'
+next_news_url = 'http://napi.uc.cn/3/classes/news_comments/categories/neirong/lists/617'
 
 headers1 = get_headers('headers.txt')
 headers2 = get_headers('headers2.txt')
 
 
-def news_data(max_pos=''):
+def news_data(max_pos='', size=10):
     return {
         '_app_id': '03b70b8484ae418789ebfec8ffa64820',
         '_fetch': '1',
         '_max_age': '1',
         '_fetch_incrs': '1',
-        '_size': '',
+        '_size': size,
         '_max_pos': max_pos
     }
 
@@ -58,27 +61,41 @@ def get_list_proc(q):
 
 def get_body_proc(q):
     start = time.time()
-    tasks = []
+    urls = []
     while True:
         try:
-            url = q.get(True, 3)
-            tasks.append(url)
-            if len(tasks) > 200:
-                p = Process(target=get_body_req, args=(tasks,))
-                p.start()
+            url = q.get(True, 10)
+            urls.append(url)
+            if len(urls) > 100:
+                # get_body_req(urls)
+                np = Process(target=get_body_req, args=(urls,))
+                np.start()
+                urls = []
         except queue.Empty:
-            if len(tasks) > 0:
-                p = Process(target=get_body_req, args=(tasks,))
-                p.start()
+            if len(urls) > 0:
+                np = Process(target=get_body_req, args=(urls,))
+                np.start()
             break
     end = time.time()
     print('cost {} second'.format(end - start - 3))
 
 
-def get_body_req(tasks):
-    for each in tasks:
-        resp = requests.get(each, headers=headers2)
-        print(resp.status_code)
+def get_body_req(urls):
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(get_body_req_async(urls))
+
+
+async def get_body_req_async(urls):
+    tasks = [fetch_content(url) for url in urls]
+    pages = await asyncio.gather(*tasks)
+    for each in pages:
+        print(each)
+
+
+async def fetch_content(url):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, headers=headers2) as resp:
+            return await resp.text()
 
 
 if __name__ == '__main__':

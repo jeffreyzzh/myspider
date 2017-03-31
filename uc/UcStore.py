@@ -13,6 +13,10 @@ class UCstore(object):
     def insert(self, data):
         self.coll.insert(data)
 
+    def insert_list(self, datalist):
+        for each in datalist:
+            self.insert(each)
+
     def __del__(self):
         self.client.close()
 
