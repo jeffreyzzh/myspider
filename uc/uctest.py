@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 # 2017/3/30
 
-import requests
-import json
-import time
-from spiderutils.copyheaders2dict import get_headers
-from uc.UcStore import UCstore
-from multiprocessing import Queue, Process
-import aiohttp
 import asyncio
-# from threading import Thread
+import json
 import queue
+import time
+from multiprocessing import Queue, Process
+
+import aiohttp
+import requests
+
+from spiderutils.copyheaders2dict import get_headers
+from uc.codes.UcStore import UCstore
 
 index_url = 'http://go.uc.cn/page/godcomment/shenpinglun'
 # news_url = 'http://napi.uc.cn/3/classes/news_comments/categories/neirong/lists/617?_app_id=03b70b8484ae418789ebfec8ffa64820&_fetch=1&_max_age=1&_fetch_incrs=1&_size=10'
