@@ -57,7 +57,7 @@ def gather_content(q):
             if len(dicts) >= 100:
                 p0 = Process(target=handle_zhengwen(dicts))
                 p0.start()
-                p0.join()
+                # p0.join()
                 dicts = []
                 time.sleep(random.randint(5, 10))
         except queue.Empty:
